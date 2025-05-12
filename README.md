@@ -1,6 +1,4 @@
-# Sample Hardhat Project
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+# Trust-link Platfrom
 
 Try running some of the following tasks:
 
@@ -11,3 +9,4 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat ignition deploy ./ignition/modules/Lock.js
 ```
+After you've deployed, you can click on the front-end page to navigate our platform
