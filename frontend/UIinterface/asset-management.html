@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资产管理 - Trust Link</title>
+    <style>
+        /* 基础样式沿用前面页面 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        /* 仪表盘特有样式 */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 15px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .user-wallet {
+            font-size: 14px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f9fafb;
+        }
+
+        .nav-link.active {
+            background: #f0f4ff;
+            color: #4361ee;
+            border-left: 3px solid #4361ee;
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            padding: 0 0 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .wallet-overview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .wallet-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .wallet-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+        
+        .wallet-card.primary::before {
+            background: #4361ee;
+        }
+        
+        .wallet-card.secondary::before {
+            background: #0ea5e9;
+        }
+        
+        .wallet-card.tertiary::before {
+            background: #6366f1;
+        }
+        
+        .wallet-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .wallet-address {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 20px;
+            word-break: break-all;
+        }
+        
+        .wallet-balance {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .wallet-value {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .wallet-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .wallet-btn {
+            flex: 1;
+            padding: 8px 0;
+            text-align: center;
+            background: #f0f4ff;
+            color: #4361ee;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .wallet-btn:hover {
+            background: #e0e7ff;
+        }
+        
+        .asset-distribution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .distribution-chart {
+            height: 300px;
+            background: #f9fafb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .asset-list {
+            list-style: none;
+        }
+        
+        .asset-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .asset-item:last-child {
+            border-bottom: none;
+        }
+        
+        .asset-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .asset-details {
+            flex: 1;
+        }
+        
+        .asset-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .asset-value {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .asset-percentage {
+            padding: 4px 8px;
+            background: #f0f4ff;
+            color: #4361ee;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .token-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .token-table th,
+        .token-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .token-table th {
+            background: #f9fafb;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .token-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .token-name {
+            display: flex;
+            align-items: center;
+        }
+        
+        .token-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .price-change {
+            display: flex;
+            align-items: center;
+        }
+        
+        .price-up {
+            color: #22c55e;
+        }
+        
+        .price-down {
+            color: #ef4444;
+        }
+        
+        .transaction-history {
+            margin-top: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .tab.active {
+            color: #4361ee;
+            border-bottom-color: #4361ee;
+        }
+        
+        .transaction-list {
+            list-style: none;
+        }
+        
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .transaction-details {
+            flex: 1;
+        }
+        
+        .transaction-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .transaction-date {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .transaction-amount {
+            font-weight: 500;
+        }
+        
+        .amount-positive {
+            color: #22c55e;
+        }
+        
+        .amount-negative {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="user.svg" alt="User Avatar">
+                    </div>
+                    <h3 class="user-name">Tester</h3>
+                    <div class="user-wallet">0x7FaD...3E4b</div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <span class="nav-icon">📊</span>仪表盘
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-investments.html" class="nav-link">
+                            <span class="nav-icon">📈</span>我的投资
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-loans.html" class="nav-link">
+                            <span class="nav-icon">📋</span>我的借款
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="asset-management.html" class="nav-link active">
+                            <span class="nav-icon">💼</span>资产管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transaction-records.html" class="nav-link">
+                            <span class="nav-icon">📝</span>交易记录
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="user-profile.html" class="nav-link">
+                            <span class="nav-icon">👤</span>个人信息
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="risk-monitoring.html" class="nav-link">
+                            <span class="nav-icon">⚠️</span>风险监控
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="account-settings.html" class="nav-link">
+                            <span class="nav-icon">⚙️</span>账户设置
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">资产管理</h1>
+                    <button class="btn">添加资产</button>
+                </div>
+
+                <div class="wallet-overview">
+                    <div class="wallet-card primary">
+                        <div class="wallet-title">
+                            <span>主要钱包</span>
+                            <span>ETH</span>
+                        </div>
+                        <div class="wallet-address">0x7FaD...3E4b</div>
+                        <div class="wallet-balance">175.8 ETH</div>
+                        <div class="wallet-value">≈ $350,240 USD</div>
+                        <div class="wallet-actions">
+                            <button class="wallet-btn">充值</button>
+                            <button class="wallet-btn">提现</button>
+                            <button class="wallet-btn">转账</button>
+                        </div>
+                    </div>
+                    
+                    <div class="wallet-card secondary">
+                        <div class="wallet-title">
+                            <span>投资钱包</span>
+                            <span>BTC</span>
+                        </div>
+                        <div class="wallet-address">bc1q9x...7p4g</div>
+                        <div class="wallet-balance">2.35 BTC</div>
+                        <div class="wallet-value">≈ $124,550 USD</div>
+                        <div class="wallet-actions">
+                            <button class="wallet-btn">充值</button>
+                            <button class="wallet-btn">提现</button>
+                            <button class="wallet-btn">转账</button>
+                        </div>
+                    </div>
+                    
+                    <div class="wallet-card tertiary">
+                        <div class="wallet-title">
+                            <span>储蓄钱包</span>
+                            <span>USDT</span>
+                        </div>
+                        <div class="wallet-address">0x3bC5...9F2a</div>
+                        <div class="wallet-balance">45,000 USDT</div>
+                        <div class="wallet-value">≈ $45,000 USD</div>
+                        <div class="wallet-actions">
+                            <button class="wallet-btn">充值</button>
+                            <button class="wallet-btn">提现</button>
+                            <button class="wallet-btn">转账</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">资产分布</h2>
+                        <div>
+                            <button class="action-btn">筛选</button>
+                            <button class="action-btn">导出</button>
+                        </div>
+                    </div>
+                    
+                    <div class="asset-distribution">
+                        <div class="distribution-chart">
+                            <img src="asset-distribution.png" alt="Asset Distribution Chart">
+                        </div>
+                        
+                        <ul class="asset-list">
+                            <li class="asset-item">
+                                <div class="asset-icon" style="background: rgba(67, 97, 238, 0.1); color: #4361ee;">
+                                    <span>ETH</span>
+                                </div>
+                                <div class="asset-details">
+                                    <div class="asset-name">以太坊</div>
+                                    <div class="asset-value">175.8 ETH (≈ $350,240 USD)</div>
+                                </div>
+                                <div class="asset-percentage">58.3%</div>
+                            </li>
+                            <li class="asset-item">
+                                <div class="asset-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                    <span>BTC</span>
+                                </div>
+                                <div class="asset-details">
+                                    <div class="asset-name">比特币</div>
+                                    <div class="asset-value">2.35 BTC (≈ $124,550 USD)</div>
+                                </div>
+                                <div class="asset-percentage">20.6%</div>
+                            </li>
+                            <li class="asset-item">
+                                <div class="asset-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                                    <span>USDT</span>
+                                </div>
+                                <div class="asset-details">
+                                    <div class="asset-name">泰达币</div>
+                                    <div class="asset-value">45,000 USDT (≈ $45,000 USD)</div>
+                                </div>
+                                <div class="asset-percentage">7.5%</div>
+                            </li>
+                            <li class="asset-item">
+                                <div class="asset-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
+                                    <span>SOL</span>
+                                </div>
+                                <div class="asset-details">
+                                    <div class="asset-name">索拉纳</div>
+                                    <div class="asset-value">420 SOL (≈ $38,640 USD)</div>
+                                </div>
+                                <div class="asset-percentage">6.4%</div>
+                            </li>
+                            <li class="asset-item">
+                                <div class="asset-icon" style="background: rgba(236, 72, 153, 0.1); color: #ec4899;">
+                                    <span>LINK</span>
+                                </div>
+                                <div class="asset-details">
+                                    <div class="asset-name">链接币</div>
+                                    <div class="asset-value">850 LINK (≈ $21,250 USD)</div>
+                                </div>
+                                <div class="asset-percentage">3.5%</div>
+                            </li>
+                            <li class="asset-item">
+                                <div class="asset-icon" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
+                                    <span>其他</span>
+                                </div>
+                                <div class="asset-details">
+                                    <div class="asset-name">其他代币</div>
+                                    <div class="asset-value">多种 (≈ $22,320 USD)</div>
+                                </div>
+                                <div class="asset-percentage">3.7%</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2 class="section-title">代币列表</h2>
+                        <div>
+                            <button class="action-btn">筛选</button>
+                        </div>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table class="token-table">
+                            <thead>
+                                <tr>
+                                    <th>代币</th>
+                                    <th>数量</th>
+                                    <th>当前价格</th>
+                                    <th>24h变动</th>
+                                    <th>总价值</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="token-name">
+                                            <img src="eth-icon.png" alt="ETH" class="token-icon">
+                                            <div>
+                                                <div style="font-weight: 500;">以太坊</div>
+                                                <div style="font-size: 12px; color: #666;">ETH</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>175.8 ETH</td>
+                                    <td>$1,992.25</td>
+                                    <td>
+                                        <div class="price-change price-up">
+                                            <span>+2.5%</span>
+                                        </div>
+                                    </td>
+                                    <td>$350,240</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+                                            <button class="action-btn">交易</button>
+                                            <button class="action-btn">转账</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="token-name">
+                                            <img src="btc-icon.png" alt="BTC" class="token-icon">
+                                            <div>
+                                                <div style="font-weight: 500;">比特币</div>
+                                                <div style="font-size: 12px; color: #666;">BTC</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>2.35 BTC</td>
+                                    <td>$53,000.00</td>
+                                    <td>
+                                        <div class="price-change price-up">
+                                            <span>+1.2%</span>
+                                        </div>
+                                    </td>
+                                    <td>$124,550</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+                                            <button class="action-btn">交易</button>
+                                            <button class="action-btn">转账</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="token-name">
+                                            <img src="usdt-icon.png" alt="USDT" class="token-icon">
+                                            <div>
+                                                <div style="font-weight: 500;">泰达币</div>
+                                                <div style="font-size: 12px; color: #666;">USDT</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>45,000 USDT</td>
+                                    <td>$1.00</td>
+                                    <td>
+                                        <div class="price-change">
+                                            <span>0.0%</span>
+                                        </div>
+                                    </td>
+                                    <td>$45,000</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+                                            <button class="action-btn">交易</button>
+                                            <button class="action-btn">转账</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="token-name">
+                                            <img src="sol-icon.png" alt="SOL" class="token-icon">
+                                            <div>
+                                                <div style="font-weight: 500;">索拉纳</div>
+                                                <div style="font-size: 12px; color: #666;">SOL</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>420 SOL</td>
+                                    <td>$92.00</td>
+                                    <td>
+                                        <div class="price-change price-down">
+                                            <span>-1.8%</span>
+                                        </div>
+                                    </td>
+                                    <td>$38,640</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+                                            <button class="action-btn">交易</button>
+                                            <button class="action-btn">转账</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="token-name">
+                                            <img src="link-icon.png" alt="LINK" class="token-icon">
+                                            <div>
+                                                <div style="font-weight: 500;">链接币</div>
+                                                <div style="font-size: 12px; color: #666;">LINK</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>850 LINK</td>
+                                    <td>$25.00</td>
+                                    <td>
+                                        <div class="price-change price-up">
+                                            <span>+3.2%</span>
+                                        </div>
+                                    </td>
+                                    <td>$21,250</td>
+                                    <td>
+                                        <div style="display: flex; gap: 10px;">
+                                            <button class="action-btn">交易</button>
+                                            <button class="action-btn">转账</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section-card transaction-history">
+                    <div class="section-header">
+                        <h2 class="section-title">最近交易</h2>
+                        <a href="transaction-records.html" class="view-link">查看全部</a>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active">全部</div>
+                        <div class="tab">存入</div>
+                        <div class="tab">提现</div>
+                        <div class="tab">转账</div>
+                        <div class="tab">交易</div>
+                    </div>
+                    
+                    <ul class="transaction-list">
+                        <li class="transaction-item">
+                            <div class="transaction-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                                <span>⬇️</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">存入 ETH</div>
+                                <div class="transaction-date">2025-05-06 14:32</div>
+                            </div>
+                            <div class="transaction-amount amount-positive">+35 ETH</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;">
+                                <span>⬆️</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">提现 USDT</div>
+                                <div class="transaction-date">2025-05-01 09:15</div>
+                            </div>
+                            <div class="transaction-amount amount-negative">-5,000 USDT</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                                <span>↔️</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">ETH 换 BTC</div>
+                                <div class="transaction-date">2025-04-28 16:45</div>
+                            </div>
+                            <div class="transaction-amount">
+                                <div class="amount-negative">-5 ETH</div>
+                                <div class="amount-positive">+0.2 BTC</div>
+                            </div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon" style="background: rgba(34, 197, 94, 0.1); color: #22c55e;">
+                                <span>⬇️</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">存入 BTC</div>
+                                <div class="transaction-date">2025-04-20 11:22</div>
+                            </div>
+                            <div class="transaction-amount amount-positive">+1.5 BTC</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                <span>↗️</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">转账 SOL 至 0xaF2c...</div>
+                                <div class="transaction-date">2025-04-15 08:30</div>
+                            </div>
+                            <div class="transaction-amount amount-negative">-100 SOL</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

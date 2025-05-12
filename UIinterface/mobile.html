@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Link - 元宇宙项目借贷平台 (移动版)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .container {
+            width: 100%;
+            padding: 0 15px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 30px;
+            margin-right: 8px;
+        }
+        
+        .menu-toggle {
+            width: 30px;
+            height: 30px;
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px;
+            cursor: pointer;
+        }
+        
+        .menu-line {
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            height: 100%;
+            background: white;
+            z-index: 100;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s;
+            padding: 20px;
+        }
+        
+        .mobile-menu.active {
+            right: 0;
+        }
+        
+        .menu-close {
+            text-align: right;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .mobile-nav {
+            list-style: none;
+        }
+        
+        .mobile-nav li {
+            margin-bottom: 15px;
+        }
+        
+        .mobile-nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            display: block;
+            padding: 8px 0;
+        }
+        
+        .mobile-nav a.btn {
+            background: #4361ee;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .hero {
+            padding: 50px 0;
+            text-align: center;
+            background: url('metaverse-bg-mobile.jpg') center/cover;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .hero p {
+            font-size: 16px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        .features {
+            padding: 40px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: #4361ee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        
+        .feature-icon i {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            margin-bottom: 25px;
+        }
+        
+        .stat-item h4 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .projects {
+            padding: 40px 0;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .project-image {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .project-content {
+            padding: 15px;
+        }
+        
+        .project-title {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .project-details {
+            margin-bottom: 12px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #4361ee;
+            border-radius: 4px;
+        }
+        
+        footer {
+            background: #1a1a1a;
+            color: #a0a0a0;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: #a0a0a0;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            font-size: 12px;
+        }
+        
+        /* 媒体查询适配更大屏幕 */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 720px;
+                margin: 0 auto;
+            }
+            
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .feature-card {
+                margin-bottom: 0;
+            }
+            
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .stat-item {
+                margin-bottom: 0;
+            }
+            
+            .project-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .project-card {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo">
+                    <span>Trust Link</span>
+                </div>
+                <button class="menu-toggle">
+                    <div class="menu-line"></div>
+                    <div class="menu-line"></div>
+                    <div class="menu-line"></div>
+                </button>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="mobile-menu">
+        <div class="menu-close">✕</div>
+        <ul class="mobile-nav">
+            <li><a href="#">首页</a></li>
+            <li><a href="#">项目浏览</a></li>
+            <li><a href="#">借款申请</a></li>
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#" class="btn">连接钱包</a></li>
+        </ul>
+    </div>
+    
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>元宇宙项目融资新时代</h1>
+                <p>Trust Link是首个专注于元宇宙和虚拟资产项目的去中心化借贷平台</p>
+                <a href="#" class="btn">立即探索</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">平台特色</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i>🔒</i>
+                    </div>
+                    <h3>信用评估体系</h3>
+                    <p>创新的链上行为分析和多数据源验证，打造可靠的信用评估机制</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i>🌐</i>
+                    </div>
+                    <h3>元宇宙专属</h3>
+                    <p>专注于元宇宙项目和虚拟资产开发，为创新者提供定制化融资方案</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i>📊</i>
+                    </div>
+                    <h3>社区治理</h3>
+                    <p>通过拜占庭容错投票系统，让投资者共同参与项目重大决策</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h4>¥120M+</h4>
+                    <p>借贷总额</p>
+                </div>
+                <div class="stat-item">
+                    <h4>56</h4>
+                    <p>成功项目</p>
+                </div>
+                <div class="stat-item">
+                    <h4>3500+</h4>
+                    <p>活跃用户</p>
+                </div>
+                <div class="stat-item">
+                    <h4>12%</h4>
+                    <p>平均年化收益</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="projects">
+        <div class="container">
+            <h2 class="section-title">热门项目</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project1.jpg');"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">MetaOffice空间</h3>
+                        <div class="project-details">
+                            <p>创建沉浸式虚拟办公环境，提升远程协作体验</p>
+                            <p>目标融资: 50 ETH | 已筹集: 35 ETH</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 70%;"></div>
+                        </div>
+                        <a href="#" class="btn" style="width: 100%; text-align: center;">投资项目</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project2.jpg');"></div>
+                    <div class="project-content">
+                        <h3 class="project-title">数字艺术NFT展馆</h3>
+                        <div class="project-details">
+                            <p>打造线上艺术展示平台，连接艺术家与收藏家</p>
+                            <p>目标融资: 80 ETH | 已筹集: 62 ETH</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 78%;"></div>
+                        </div>
+                        <a href="#" class="btn" style="width: 100%; text-align: center;">投资项目</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Trust Link</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">首页</a>
+                <a href="#" class="footer-link">项目浏览</a>
+                <a href="#" class="footer-link">借款申请</a>
+                <a href="#" class="footer-link">我的账户</a>
+                <a href="#" class="footer-link">服务条款</a>
+                <a href="#" class="footer-link">隐私政策</a>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Trust Link. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 移动端菜单切换
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.mobile-menu').classList.add('active');
+        });
+        
+        document.querySelector('.menu-close').addEventListener('click', function() {
+            document.querySelector('.mobile-menu').classList.remove('active');
+        });
+    </script>
+</body>
+</html>

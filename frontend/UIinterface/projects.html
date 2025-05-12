@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目浏览 - Trust Link</title>
+    <style>
+        /* 基础样式沿用首页 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        /* 项目浏览页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-label {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 150px;
+        }
+
+        .filter-checkbox {
+            margin-right: 5px;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .filter-btn-primary {
+            background: #4361ee;
+            color: white;
+            border: none;
+        }
+
+        .filter-btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .projects-section {
+            padding: 20px 0 60px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .project-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .project-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .project-content {
+            padding: 20px;
+        }
+
+        .project-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .project-details {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .project-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            font-size: 18px;
+            color: #4361ee;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .progress {
+            height: 100%;
+            background: #4361ee;
+            border-radius: 5px;
+        }
+
+        .project-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .page-item {
+            margin: 0 5px;
+        }
+
+        .page-link {
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #4361ee;
+            text-decoration: none;
+        }
+
+        .page-link.active {
+            background: #4361ee;
+            color: white;
+            border-color: #4361ee;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">项目浏览</h1>
+            <p>发现并投资有潜力的元宇宙创新项目，共同构建数字未来</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="filter-section">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <span class="filter-label">项目类型:</span>
+                    <select class="filter-select">
+                        <option value="all">全部项目</option>
+                        <option value="office">虚拟办公</option>
+                        <option value="estate">虚拟地产</option>
+                        <option value="nft">NFT艺术</option>
+                        <option value="game">元宇宙游戏</option>
+                        <option value="retail">虚拟零售</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">融资阶段:</span>
+                    <select class="filter-select">
+                        <option value="all">全部阶段</option>
+                        <option value="seed">种子轮</option>
+                        <option value="early">早期</option>
+                        <option value="growth">成长期</option>
+                        <option value="mature">成熟期</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">融资金额:</span>
+                    <input type="number" class="filter-input" placeholder="最小金额">
+                    <span>至</span>
+                    <input type="number" class="filter-input" placeholder="最大金额">
+                </div>
+            </div>
+            <div class="filter-row">
+                <div class="filter-group">
+                    <span class="filter-label">风险等级:</span>
+                    <select class="filter-select">
+                        <option value="all">全部风险</option>
+                        <option value="low">低风险</option>
+                        <option value="medium">中等风险</option>
+                        <option value="high">高风险</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <span class="filter-label">融资进度:</span>
+                    <select class="filter-select">
+                        <option value="all">全部进度</option>
+                        <option value="early">刚开始 (<30%)< /option>
+                        <option value="middle">进行中 (30%-70%)</option>
+                        <option value="late">即将完成 (>70%)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <input type="checkbox" class="filter-checkbox" id="only-active">
+                    <label for="only-active">仅显示活跃项目</label>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="filter-btn filter-btn-secondary">重置筛选</button>
+                <button class="filter-btn filter-btn-primary">应用筛选</button>
+            </div>
+        </section>
+
+        <section class="projects-section">
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project1.svg');">
+                        <span class="project-tag">虚拟办公</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">MetaOffice空间</h3>
+                        <div class="project-details">
+                            <p>创建沉浸式虚拟办公环境，提升远程协作体验，支持VR互动与3D模型协作。</p>
+                        </div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="stat-value">50 ETH</div>
+                                <div class="stat-label">目标融资</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">35 ETH</div>
+                                <div class="stat-label">已筹集</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">12%</div>
+                                <div class="stat-label">年化收益</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 70%;"></div>
+                        </div>
+                        <div class="project-actions">
+                            <a href="project_invest.html" class="btn">投资项目</a>
+                            <a href="project-details.html?id=1" style="color: #4361ee; text-decoration: none;">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project2.svg');">
+                        <span class="project-tag">NFT艺术</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">数字艺术NFT展馆</h3>
+                        <div class="project-details">
+                            <p>打造线上艺术展示平台，连接艺术家与收藏家，支持艺术品交易和展览。</p>
+                        </div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="stat-value">80 ETH</div>
+                                <div class="stat-label">目标融资</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">62 ETH</div>
+                                <div class="stat-label">已筹集</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">15%</div>
+                                <div class="stat-label">年化收益</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 78%;"></div>
+                        </div>
+                        <div class="project-actions">
+                            <a href="#" class="btn">投资项目</a>
+                            <a href="#" style="color: #4361ee; text-decoration: none;">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project3.svg');">
+                        <span class="project-tag">虚拟零售</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">元宇宙商业街区</h3>
+                        <div class="project-details">
+                            <p>构建虚拟商业区，为品牌提供元宇宙店铺空间，支持购物和社交互动。</p>
+                        </div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="stat-value">120 ETH</div>
+                                <div class="stat-label">目标融资</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">45 ETH</div>
+                                <div class="stat-label">已筹集</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">18%</div>
+                                <div class="stat-label">年化收益</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 37%;"></div>
+                        </div>
+                        <div class="project-actions">
+                            <a href="project-invest2.html" class="btn">投资项目</a>
+                            <a href="project-detail2.html" style="color: #4361ee; text-decoration: none;">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project4.svg');">
+                        <span class="project-tag">元宇宙游戏</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">区块链RPG游戏</h3>
+                        <div class="project-details">
+                            <p>去中心化角色扮演游戏，玩家可拥有并交易游戏内资产，打造独特体验。</p>
+                        </div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="stat-value">200 ETH</div>
+                                <div class="stat-label">目标融资</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">85 ETH</div>
+                                <div class="stat-label">已筹集</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">20%</div>
+                                <div class="stat-label">年化收益</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 42%;"></div>
+                        </div>
+                        <div class="project-actions">
+                            <a href="#" class="btn">投资项目</a>
+                            <a href="#" style="color: #4361ee; text-decoration: none;">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project5.svg');">
+                        <span class="project-tag">虚拟地产</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">元宇宙地产开发</h3>
+                        <div class="project-details">
+                            <p>在Decentraland平台上开发虚拟地产，建设社区中心和娱乐设施。</p>
+                        </div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="stat-value">150 ETH</div>
+                                <div class="stat-label">目标融资</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">120 ETH</div>
+                                <div class="stat-label">已筹集</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">14%</div>
+                                <div class="stat-label">年化收益</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 80%;"></div>
+                        </div>
+                        <div class="project-actions">
+                            <a href="#" class="btn">投资项目</a>
+                            <a href="#" style="color: #4361ee; text-decoration: none;">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('project6.svg');">
+                        <span class="project-tag">虚拟社交</span>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">元宇宙社交平台</h3>
+                        <div class="project-details">
+                            <p>创建虚拟社交空间，用户可自定义形象，参与各类社交活动和娱乐体验。</p>
+                        </div>
+                        <div class="project-stats">
+                            <div class="project-stat">
+                                <div class="stat-value">100 ETH</div>
+                                <div class="stat-label">目标融资</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">25 ETH</div>
+                                <div class="stat-label">已筹集</div>
+                            </div>
+                            <div class="project-stat">
+                                <div class="stat-value">16%</div>
+                                <div class="stat-label">年化收益</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 25%;"></div>
+                        </div>
+                        <div class="project-actions">
+                            <a href="#" class="btn">投资项目</a>
+                            <a href="#" style="color: #4361ee; text-decoration: none;">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <div class="page-item">
+                    <a href="projects.html?page=1" class="page-link" title="首页">&laquo;</a>
+                </div>
+                <div class="page-item">
+                    <a href="projects.html?page=1" class="page-link active">1</a>
+                </div>
+                <div class="page-item">
+                    <a href="projects.html?page=2" class="page-link">2</a>
+                </div>
+                <div class="page-item">
+                    <a href="projects.html?page=3" class="page-link">3</a>
+                </div>
+                <div class="page-item">
+                    <a href="projects.html?page=2" class="page-link" title="下一页">&raquo;</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

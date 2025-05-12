@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借款申请 - 融资需求 | Trust Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        /* 借款申请页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .page-description {
+            max-width: 800px;
+            color: #666;
+        }
+        
+        .application-container {
+            padding: 40px 0 80px;
+        }
+        
+        .application-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .application-steps::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 20%;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .step.active .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .step.active .step-label {
+            color: #4361ee;
+            font-weight: 500;
+        }
+        
+        .application-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-required {
+            color: #e53e3e;
+            margin-left: 5px;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-hint {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .financing-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .financing-option {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .financing-option:hover {
+            border-color: #4361ee;
+            background: #f7f9ff;
+        }
+        
+        .financing-option.selected {
+            border-color: #4361ee;
+            background: #f0f4ff;
+        }
+        
+        .option-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #4361ee;
+        }
+        
+        .option-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .option-description {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .currency-select {
+            display: flex;
+            align-items: center;
+        }
+        
+        .currency-label {
+            margin-right: 10px;
+            font-weight: 500;
+        }
+        
+        .milestone-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .milestone-title {
+            font-weight: 500;
+        }
+        
+        .milestone-delete {
+            color: #e53e3e;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .add-milestone {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 1px dashed #ddd;
+            border-radius: 8px;
+            color: #4361ee;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+        
+        .add-milestone:hover {
+            background: #f7f9ff;
+            border-color: #4361ee;
+        }
+        
+        .add-icon {
+            margin-right: 10px;
+        }
+        
+        .collateral-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .collateral-option {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .collateral-option:hover {
+            border-color: #4361ee;
+            background: #f7f9ff;
+        }
+        
+        .collateral-option.selected {
+            border-color: #4361ee;
+            background: #f0f4ff;
+        }
+        
+        .collateral-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #4361ee;
+        }
+        
+        .collateral-title {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .risk-info {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .risk-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .risk-list {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">借款申请</h1>
+            <p class="page-description">通过Trust Link平台为您的元宇宙项目获取融资，只需完成以下申请步骤，我们将对您的项目进行评估，并为您匹配合适的投资者。</p>
+        </div>
+    </section>
+    
+    <section class="application-container">
+        <div class="container">
+            <div class="application-steps">
+                <div class="step completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">项目信息</div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">融资需求</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">抵押设置</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">风险评估</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">提交审核</div>
+                </div>
+            </div>
+            
+            <div class="application-form">
+                <div class="form-section">
+                    <h2 class="form-title">融资类型</h2>
+                    <div class="financing-options">
+                        <div class="financing-option selected" onclick="selectFinancingOption(this)">
+                            <div class="option-icon">💰</div>
+                            <div class="option-title">一次性融资</div>
+                            <div class="option-description">一次性获取全部融资金额，用于项目完整开发</div>
+                        </div>
+                        <div class="financing-option" onclick="selectFinancingOption(this)">
+                            <div class="option-icon">📊</div>
+                            <div class="option-title">分阶段融资</div>
+                            <div class="option-description">根据项目里程碑分批次获取融资，降低风险</div>
+                        </div>
+                        <div class="financing-option" onclick="selectFinancingOption(this)">
+                            <div class="option-icon">🔄</div>
+                            <div class="option-title">循环融资</div>
+                            <div class="option-description">设置融资额度，可循环使用，灵活应对需求变化</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">融资金额与期限</h2>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">融资金额<span class="form-required">*</span></label>
+                                <div style="display: flex;">
+                                    <input type="number" class="form-input" placeholder="输入融资金额" style="border-radius: 4px 0 0 4px;">
+                                    <select class="form-select" style="width: 100px; border-radius: 0 4px 4px 0; border-left: none;">
+                                        <option value="ETH">ETH</option>
+                                        <option value="USDT">USDT</option>
+                                        <option value="USDC">USDC</option>
+                                    </select>
+                                </div>
+                                <span class="form-hint">请输入您所需的融资金额</span>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">融资期限<span class="form-required">*</span></label>
+                                <select class="form-select">
+                                    <option value="">请选择融资期限</option>
+                                    <option value="3">3个月</option>
+                                    <option value="6">6个月</option>
+                                    <option value="12">12个月</option>
+                                    <option value="18">18个月</option>
+                                    <option value="24">24个月</option>
+                                    <option value="36">36个月</option>
+                                </select>
+                                <span class="form-hint">选择您计划的融资期限</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">预期年化收益率<span class="form-required">*</span></label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="number" class="form-input" placeholder="输入预期年化收益率">
+                            <span style="margin-left: 10px;">%</span>
+                        </div>
+                        <span class="form-hint">设置合理的年化收益率可提高融资成功率（平台平均年化收益率为12%）</span>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">资金用途计划</h2>
+                    <div class="form-group">
+                        <label class="form-label">资金用途明细<span class="form-required">*</span></label>
+                        <textarea class="form-textarea" placeholder="详细说明融资资金的具体用途，例如：技术开发40%、市场推广30%、运营成本20%、其他10%"></textarea>
+                    </div>
+                    
+                    <h3 style="margin: 30px 0 20px;">项目里程碑（仅限分阶段融资）</h3>
+                    
+                    <div class="milestone-item">
+                        <div class="milestone-header">
+                            <div class="milestone-title">里程碑 1</div>
+                            <button class="milestone-delete">删除</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">里程碑名称</label>
+                                    <input type="text" class="form-input" placeholder="例如：MVP开发完成">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">计划完成时间</label>
+                                    <input type="date" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">里程碑描述</label>
+                            <textarea class="form-textarea" placeholder="详细描述此里程碑的具体内容和验收标准"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">资金需求比例</label>
+                            <div style="display: flex; align-items: center;">
+                                <input type="number" class="form-input" placeholder="输入资金需求比例">
+                                <span style="margin-left: 10px;">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="milestone-item">
+                        <div class="milestone-header">
+                            <div class="milestone-title">里程碑 2</div>
+                            <button class="milestone-delete">删除</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">里程碑名称</label>
+                                    <input type="text" class="form-input" placeholder="例如：用户测试版上线">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label class="form-label">计划完成时间</label>
+                                    <input type="date" class="form-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">里程碑描述</label>
+                            <textarea class="form-textarea" placeholder="详细描述此里程碑的具体内容和验收标准"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">资金需求比例</label>
+                            <div style="display: flex; align-items: center;">
+                                <input type="number" class="form-input" placeholder="输入资金需求比例">
+                                <span style="margin-left: 10px;">%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="add-milestone" onclick="addMilestone()">
+                        <span class="add-icon">+</span> 添加里程碑
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">项目收入与还款计划</h2>
+                    <div class="form-group">
+                        <label class="form-label">预期收入来源<span class="form-required">*</span></label>
+                        <textarea class="form-textarea" placeholder="详细说明项目预期的收入来源，例如：虚拟资产销售、会员订阅、广告收入等"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">首笔收入预计时间<span class="form-required">*</span></label>
+                        <input type="date" class="form-input">
+                        <span class="form-hint">项目产生第一笔收入的预计时间</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">预期盈亏平衡时间<span class="form-required">*</span></label>
+                        <input type="date" class="form-input">
+                        <span class="form-hint">项目预计达到盈亏平衡的时间</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">还款计划<span class="form-required">*</span></label>
+                        <select class="form-select">
+                            <option value="">请选择还款计划</option>
+                            <option value="monthly">每月等额本息</option>
+                            <option value="quarterly">季度付息，到期还本</option>
+                            <option value="bullet">到期一次性还本付息</option>
+                            <option value="revenue">按收入比例还款</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="risk-info">
+                    <h3 class="risk-title">融资需求须知</h3>
+                    <ul class="risk-list">
+                        <li>请确保所填写的融资金额与项目实际需求相符，过高或过低的融资金额可能影响审核结果</li>
+                        <li>平台将根据您的项目类型、发展阶段和风险评级，综合评估合理的融资额度</li>
+                        <li>预期年化收益率是投资人投资决策的重要因素，请根据项目预期盈利情况合理设置</li>
+                        <li>资金用途计划将纳入平台监管范围，实际使用需符合申报计划</li>
+                        <li>对于分阶段融资，每个里程碑完成后需提交验收材料，验收通过后方可获得下一阶段融资</li>
+                    </ul>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="loan-application.html" class="btn btn-secondary">上一步</a>
+                    <a href="loan-collateral.html" class="btn">下一步</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        function selectFinancingOption(element) {
+            const options = document.querySelectorAll('.financing-option');
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+        
+        function addMilestone() {
+            const milestoneItems = document.querySelectorAll('.milestone-item');
+            const newIndex = milestoneItems.length + 1;
+            
+            const milestoneHtml = `
+                <div class="milestone-item">
+                    <div class="milestone-header">
+                        <div class="milestone-title">里程碑 ${newIndex}</div>
+                        <button class="milestone-delete" onclick="this.parentElement.parentElement.remove()">删除</button>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">里程碑名称</label>
+                                <input type="text" class="form-input" placeholder="例如：项目XX阶段完成">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">计划完成时间</label>
+                                <input type="date" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">里程碑描述</label>
+                        <textarea class="form-textarea" placeholder="详细描述此里程碑的具体内容和验收标准"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">资金需求比例</label>
+                        <div style="display: flex; align-items: center;">
+                            <input type="number" class="form-input" placeholder="输入资金需求比例">
+                            <span style="margin-left: 10px;">%</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const addMilestoneElement = document.querySelector('.add-milestone');
+            addMilestoneElement.insertAdjacentHTML('beforebegin', milestoneHtml);
+        }
+    </script>
+</body>
+</html>

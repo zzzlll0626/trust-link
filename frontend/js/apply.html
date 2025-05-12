@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借款申请 - Trust Link</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Trust Link</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="apply.html" class="active">借款申请</a></li>
+                    <li><a href="demo.html">演示面板</a></li>
+                    <li><button id="connect-wallet" class="btn">连接钱包</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">借款申请</h1>
+            <p>创建您的元宇宙项目，获取投资者的支持</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">项目申请表单</h2>
+                </div>
+                
+                <form id="project-form">
+                    <div class="form-group">
+                        <label class="form-label" for="project-title">项目名称</label>
+                        <input type="text" id="project-title" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="project-description">项目描述</label>
+                        <textarea id="project-description" class="form-control" rows="5" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="funding-goal">融资目标 (ETH)</label>
+                        <input type="number" id="funding-goal" class="form-control" min="1" step="1" required>
+                        <small class="form-hint">注意: 创建项目需要抵押等同于融资目标20%的ETH</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="funding-duration">融资期限 (天)</label>
+                        <input type="number" id="funding-duration" class="form-control" min="7" max="90" value="30" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">项目类型</label>
+                        <div>
+                            <label>
+                                <input type="radio" name="project-type" value="office" checked> 虚拟办公
+                            </label>
+                            <label style="margin-left: 15px;">
+                                <input type="radio" name="project-type" value="nft"> NFT艺术
+                            </label>
+                            <label style="margin-left: 15px;">
+                                <input type="radio" name="project-type" value="retail"> 虚拟商业
+                            </label>
+                            <label style="margin-left: 15px;">
+                                <input type="radio" name="project-type" value="other"> 其他
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="collateral-info" class="card" style="background-color: #f8f9fa; margin: 20px 0;">
+                        <h3 style="margin-bottom: 10px;">抵押品信息</h3>
+                        <p>根据您的融资目标 <span id="funding-amount">0</span> ETH</p>
+                        <p>需要抵押 <span id="collateral-amount">0</span> ETH (20%)</p>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">提交项目申请</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Trust Link 借贷平台. 所有权利保留。</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+    <script type="module">
+        import { connectWallet, updateAccountInfo, getContracts } from './js/app.js';
+        import { ethers } from "./js/ethers-5.6.esm.min.js";
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 连接钱包按钮
+            document.getElementById('connect-wallet').addEventListener('click', async () => {
+                const account = await connectWallet();
+                if (account) {
+                    await updateAccountInfo(account);
+                    // 更新按钮文本
+                    document.getElementById('connect-wallet').textContent = '已连接';
+                }
+            });
+            
+            // 更新抵押品信息
+            const fundingGoalInput = document.getElementById('funding-goal');
+            fundingGoalInput.addEventListener('input', updateCollateralInfo);
+            
+            function updateCollateralInfo() {
+                const fundingGoal = parseFloat(fundingGoalInput.value) || 0;
+                const collateralAmount = fundingGoal * 0.2;
+                
+                document.getElementById('funding-amount').textContent = fundingGoal;
+                document.getElementById('collateral-amount').textContent = collateralAmount;
+            }
+            
+            // 项目表单提交
+            document.getElementById('project-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // 检查钱包连接
+                if (!window.ethereum || !window.ethereum.selectedAddress) {
+                    alert('请先连接钱包!');
+                    return;
+                }
+                
+                // 获取表单数据
+                // 获取表单数据
+                const title = document.getElementById('project-title').value;
+                const description = document.getElementById('project-description').value;
+                const fundingGoal = document.getElementById('funding-goal').value;
+                const duration = document.getElementById('funding-duration').value;
+                
+                // 验证表单
+                if (!title || !description || !fundingGoal || !duration) {
+                    alert('请填写所有必填字段!');
+                    return;
+                }
+                
+                try {
+                    // 获取合约
+                    const contracts = await getContracts();
+                    
+                    // 计算抵押品金额 (20%)
+                    const fundingGoalWei = ethers.utils.parseEther(fundingGoal);
+                    const collateralWei = fundingGoalWei.mul(20).div(100);
+                    
+                    // 发送交易
+                    const tx = await contracts.lending.createProject(
+                        title,
+                        description,
+                        fundingGoalWei,
+                        parseInt(duration),
+                        { value: collateralWei }
+                    );
+                    
+                    // 等待交易确认
+                    await tx.wait();
+                    
+                    alert('项目创建成功!');
+                    
+                    // 重置表单
+                    document.getElementById('project-form').reset();
+                    updateCollateralInfo();
+                    
+                    // 跳转到项目页面
+                    window.location.href = 'projects.html';
+                } catch (error) {
+                    console.error('创建项目失败:', error);
+                    alert('创建项目失败: ' + error.message);
+                }
+            });
+            
+            // 初始化抵押品信息
+            updateCollateralInfo();
+            
+            // 尝试自动连接钱包
+            try {
+                if (window.ethereum && window.ethereum.selectedAddress) {
+                    const account = window.ethereum.selectedAddress;
+                    if (account) {
+                        await updateAccountInfo(account);
+                        document.getElementById('connect-wallet').textContent = '已连接';
+                    }
+                }
+            } catch (error) {
+                console.error('自动连接钱包失败:', error);
+            }
+        });
+    </script>
+</body>
+</html>

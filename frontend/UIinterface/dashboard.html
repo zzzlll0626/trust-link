@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户仪表盘 - Trust Link</title>
+    <style>
+        /* 基础样式沿用前面页面 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        /* 仪表盘特有样式 */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 15px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .user-wallet {
+            font-size: 14px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f9fafb;
+        }
+
+        .nav-link.active {
+            background: #f0f4ff;
+            color: #4361ee;
+            border-left: 3px solid #4361ee;
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-message h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .last-login {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #4361ee;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .portfolio-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: #f0f4ff;
+            color: #4361ee;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #e0e7ff;
+        }
+
+        .portfolio-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .portfolio-table th,
+        .portfolio-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .portfolio-table th {
+            background: #f9fafb;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .portfolio-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .project-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .project-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .status-pending {
+            background: rgba(234, 179, 8, 0.1);
+            color: #eab308;
+        }
+
+        .status-completed {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .status-risk {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .view-link {
+            color: #4361ee;
+            text-decoration: none;
+        }
+
+        .risk-monitor {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .risk-chart {
+            height: 250px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ddd;
+        }
+
+        .risk-chart img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .transactions-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .transaction-list {
+            list-style: none;
+        }
+
+        .transaction-item {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            background: #f0f4ff;
+            color: #4361ee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .transaction-date {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .transaction-amount {
+            font-weight: 500;
+        }
+
+        .amount-positive {
+            color: #22c55e;
+        }
+
+        .amount-negative {
+            color: #ef4444;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" 
+                    style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="user.svg" alt="User Avatar">
+                    </div>
+                    <h3 class="user-name">Tester</h3>
+                    <div class="user-wallet">0x7FaD...3E4b</div>
+                </div>
+
+
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link active">
+                            <span class="nav-icon">📊</span>仪表盘
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-investments.html" class="nav-link">
+                            <span class="nav-icon">📈</span>我的投资
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-loans.html" class="nav-link">
+                            <span class="nav-icon">📋</span>我的借款
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="asset-management.html" class="nav-link">
+                            <span class="nav-icon">💼</span>资产管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transaction-records.html" class="nav-link">
+                            <span class="nav-icon">📝</span>交易记录
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="user-profile.html" class="nav-link">
+                            <span class="nav-icon">👤</span>个人信息
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="risk-monitoring.html" class="nav-link">
+                            <span class="nav-icon">⚠️</span>风险监控
+                        </a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a href="account-settings.html" class="nav-link">
+                            <span class="nav-icon">⚙️</span>账户设置
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <div class="dashboard-header">
+                    <div class="welcome-message">
+                        <h1>欢迎回来，Tester</h1>
+                        <div class="last-login">上次登录: 2025年5月8日 09:45</div>
+                    </div>
+                    <a href="credit-center.html" class="btn">信用中心</a>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">250.5 ETH</div>
+                        <div class="stat-label">总资产价值</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">128.3 ETH</div>
+                        <div class="stat-label">已投资金额</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">15.2%</div>
+                        <div class="stat-label">平均年化收益</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">活跃投资项目</div>
+                    </div>
+                </div>
+
+                <div class="portfolio-section">
+                    <div class="section-header">
+                        <h2 class="section-title">投资组合</h2>
+                        <div class="section-actions">
+                            <button class="action-btn">筛选</button>
+                            <button class="action-btn">导出</button>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="portfolio-table">
+                            <thead>
+                                <tr>
+                                    <th>项目名称</th>
+                                    <th>投资金额</th>
+                                    <th>投资日期</th>
+                                    <th>预期收益</th>
+                                    <th>已获收益</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="project-name">
+                                            <div class="project-icon">
+                                                <img src="MetaOffice空间.svg" alt="MetaOffice">
+                                            </div>
+                                            <span>MetaOffice空间</span>
+                                        </div>
+                                    </td>
+                                    <td>35 ETH</td>
+                                    <td>2025-04-15</td>
+                                    <td>4.2 ETH</td>
+                                    <td>1.2 ETH</td>
+                                    <td><span class="status-badge status-active">进行中</span></td>
+                                    <td><a href="#" class="view-link">查看详情</a></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="project-name">
+                                            <div class="project-icon">
+                                                <img src="数字艺术NFT展馆.svg" alt="NFT Gallery">
+                                            </div>
+                                            <span>数字艺术NFT展馆</span>
+                                        </div>
+                                    </td>
+                                    <td>20 ETH</td>
+                                    <td>2025-03-22</td>
+                                    <td>3.0 ETH</td>
+                                    <td>1.8 ETH</td>
+                                    <td><span class="status-badge status-active">进行中</span></td>
+                                    <td><a href="#" class="view-link">查看详情</a></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="project-name">
+                                            <div class="project-icon">
+                                                <img src="元宇宙商业街区.svg" alt="Meta Mall">
+                                            </div>
+                                            <span>元宇宙商业街区</span>
+                                        </div>
+                                    </td>
+                                    <td>15 ETH</td>
+                                    <td>2025-02-18</td>
+                                    <td>2.7 ETH</td>
+                                    <td>0.9 ETH</td>
+                                    <td><span class="status-badge status-risk">风险预警</span></td>
+                                    <td><a href="project-risk-monitor.html" class="view-link">查看详情</a></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="project-name">
+                                            <div class="project-icon">
+                                                <img src="区块链RPG游戏.svg" alt="VR Game">
+                                            </div>
+                                            <span>区块链RPG游戏</span>
+                                        </div>
+                                    </td>
+                                    <td>25 ETH</td>
+                                    <td>2025-01-05</td>
+                                    <td>5.0 ETH</td>
+                                    <td>2.5 ETH</td>
+                                    <td><span class="status-badge status-active">进行中</span></td>
+                                    <td><a href="#" class="view-link">查看详情</a></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="project-name">
+                                            <div class="project-icon">
+                                                <img src="元宇宙地产开发.svg" alt="Virtual Estate">
+                                            </div>
+                                            <span>元宇宙地产开发</span>
+                                        </div>
+                                    </td>
+                                    <td>30 ETH</td>
+                                    <td>2024-12-10</td>
+                                    <td>4.2 ETH</td>
+                                    <td>4.2 ETH</td>
+                                    <td><span class="status-badge status-completed">已完成</span></td>
+                                    <td><a href="#" class="view-link">查看详情</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="risk-monitor">
+                    <div class="section-header" style="padding: 0 0 20px 0; border-bottom: none;">
+                        <h2 class="section-title">投资组合风险监控</h2>
+                        <div class="section-actions">
+                            <button class="action-btn">设置预警</button>
+                        </div>
+                    </div>
+                    <div class="risk-chart">
+                        <img src="risk-chart.svg" alt="Risk Monitoring Chart">
+                    </div>
+                </div>
+
+                <div class="transactions-section">
+                    <div class="section-header">
+                        <h2 class="section-title">最近交易</h2>
+                        <a href="#" class="view-link">查看全部</a>
+                    </div>
+                    <ul class="transaction-list">
+                        <li class="transaction-item">
+                            <div class="transaction-icon">💰</div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">投资 MetaOffice空间</div>
+                                <div class="transaction-date">2025-05-06 14:32</div>
+                            </div>
+                            <div class="transaction-amount amount-negative">-35 ETH</div>
+                        </li>
+                        <li class="transaction-item">
+                            
+                            <div class="transaction-icon">📈</div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">收益 数字艺术NFT展馆</div>
+                                <div class="transaction-date">2025-05-01 09:15</div>
+                            </div>
+                            <div class="transaction-amount amount-positive">+0.5 ETH</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon">💱</div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">转让投资份额 虚拟社交平台</div>
+                                <div class="transaction-date">2025-04-28 16:45</div>
+                            </div>
+                            <div class="transaction-amount amount-positive">+12.5 ETH</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon">🏦</div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">存入资金</div>
+                                <div class="transaction-date">2025-04-20 11:22</div>
+                            </div>
+                            <div class="transaction-amount amount-positive">+50 ETH</div>
+                        </li>
+                        <li class="transaction-item">
+                            <div class="transaction-icon">📊</div>
+                            <div class="transaction-details">
+                                <div class="transaction-title">收益 区块链RPG游戏</div>
+                                <div class="transaction-date">2025-04-15 08:30</div>
+                            </div>
+                            <div class="transaction-amount amount-positive">+0.8 ETH</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

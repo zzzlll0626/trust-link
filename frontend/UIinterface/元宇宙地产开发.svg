@@ -1,0 +1,18 @@
+<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="60" height="60" fill="#F0F9FF" rx="8" ry="8"/>
+  
+  <!-- 虚拟地产 -->
+  <polygon points="30,15 45,25 30,35 15,25" fill="#4CC9F0"/>
+  
+  <!-- 建筑 -->
+  <rect x="25" y="20" width="10" height="15" fill="#3A0CA3"/>
+  <polygon points="25,20 35,20 30,15" fill="#3A0CA3"/>
+  
+  <!-- 地块网格 -->
+  <path d="M15 40 L45 40 M15 45 L45 45 M20 35 L20 50 M30 35 L30 50 M40 35 L40 50" stroke="#7209B7" stroke-width="1" fill="none"/>
+  
+  <!-- 开发标识 -->
+  <circle cx="38" cy="20" r="5" fill="#F72585"/>
+  <path d="M35 20 L41 20 M38 17 L38 23" stroke="#FFFFFF" stroke-width="1.5"/>
+</svg>

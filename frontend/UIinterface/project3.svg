@@ -1,0 +1,80 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 渐变背景 -->
+  <defs>
+    <linearGradient id="mallGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F5A0" />
+      <stop offset="50%" stop-color="#00D9F5" />
+      <stop offset="100%" stop-color="#9D00FF" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="200" fill="url(#mallGradient)" opacity="0.2"/>
+  
+  <!-- 商业街区建筑群 -->
+  <rect x="50" y="40" width="60" height="120" rx="2" fill="#FF0080"/>
+  <rect x="50" y="40" width="60" height="20" rx="2" fill="#FF5CAA"/>
+  
+  <rect x="120" y="60" width="60" height="100" rx="2" fill="#00D9F5"/>
+  <rect x="120" y="60" width="60" height="15" rx="2" fill="#7DF5FF"/>
+  
+  <rect x="190" y="70" width="70" height="90" rx="2" fill="#00F5A0"/>
+  <rect x="190" y="70" width="70" height="15" rx="2" fill="#7DFFCF"/>
+  
+  <rect x="270" y="50" width="80" height="110" rx="2" fill="#9D00FF"/>
+  <rect x="270" y="50" width="80" height="20" rx="2" fill="#CA72FF"/>
+  
+  <!-- 3D效果阴影 -->
+  <rect x="55" y="45" width="60" height="120" rx="2" fill="#FF0080" opacity="0.3"/>
+  <rect x="125" y="65" width="60" height="100" rx="2" fill="#00D9F5" opacity="0.3"/>
+  <rect x="195" y="75" width="70" height="90" rx="2" fill="#00F5A0" opacity="0.3"/>
+  <rect x="275" y="55" width="80" height="110" rx="2" fill="#9D00FF" opacity="0.3"/>
+  
+  <!-- 窗户 - 发光效果 -->
+  <g fill="#ffffff" opacity="0.9">
+    <rect x="60" y="70" width="10" height="10" rx="1"/>
+    <rect x="90" y="70" width="10" height="10" rx="1"/>
+    <rect x="60" y="90" width="10" height="10" rx="1"/>
+    <rect x="90" y="90" width="10" height="10" rx="1"/>
+    <rect x="60" y="110" width="10" height="10" rx="1"/>
+    <rect x="90" y="110" width="10" height="10" rx="1"/>
+    
+    <rect x="130" y="85" width="10" height="10" rx="1"/>
+    <rect x="160" y="85" width="10" height="10" rx="1"/>
+    <rect x="130" y="105" width="10" height="10" rx="1"/>
+    <rect x="160" y="105" width="10" height="10" rx="1"/>
+    <rect x="130" y="125" width="10" height="10" rx="1"/>
+    <rect x="160" y="125" width="10" height="10" rx="1"/>
+    
+    <rect x="200" y="95" width="10" height="10" rx="1"/>
+    <rect x="240" y="95" width="10" height="10" rx="1"/>
+    <rect x="200" y="115" width="10" height="10" rx="1"/>
+    <rect x="240" y="115" width="10" height="10" rx="1"/>
+    <rect x="200" y="135" width="10" height="10" rx="1"/>
+    <rect x="240" y="135" width="10" height="10" rx="1"/>
+    
+    <rect x="285" y="80" width="10" height="15" rx="1"/>
+    <rect x="305" y="80" width="10" height="15" rx="1"/>
+    <rect x="325" y="80" width="10" height="15" rx="1"/>
+    <rect x="285" y="105" width="10" height="15" rx="1"/>
+    <rect x="305" y="105" width="10" height="15" rx="1"/>
+    <rect x="325" y="105" width="10" height="15" rx="1"/>
+    <rect x="285" y="130" width="10" height="15" rx="1"/>
+    <rect x="305" y="130" width="10" height="15" rx="1"/>
+    <rect x="325" y="130" width="10" height="15" rx="1"/>
+  </g>
+  
+  <!-- 商业街地面 - 发光效果 -->
+  <rect x="50" y="160" width="300" height="20" fill="#1F0030"/>
+  <rect x="50" y="160" width="300" height="5" fill="#CA72FF"/>
+  <line x1="50" y1="165" x2="350" y2="165" stroke="#ffffff" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- 品牌标识和装饰 - 霓虹灯效果 -->
+  <circle cx="75" y="30" r="8" fill="#FF0080"/>
+  <circle cx="75" y="30" r="4" fill="#ffffff"/>
+  <circle cx="140" y="50" r="8" fill="#00D9F5"/>
+  <circle cx="140" y="50" r="4" fill="#ffffff"/>
+  <circle cx="215" y="60" r="8" fill="#00F5A0"/>
+  <circle cx="215" y="60" r="4" fill="#ffffff"/>
+  <circle cx="300" y="40" r="8" fill="#9D00FF"/>
+  <circle cx="300" y="40" r="4" fill="#ffffff"/>
+
+</svg>

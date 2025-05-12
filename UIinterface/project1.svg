@@ -1,0 +1,49 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 渐变背景 -->
+  <defs>
+    <linearGradient id="metaOfficeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4CC9F0" />
+      <stop offset="50%" stop-color="#4361EE" />
+      <stop offset="100%" stop-color="#3A0CA3" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="200" fill="url(#metaOfficeGradient)" opacity="0.3"/>
+  
+  <!-- 装饰元素 -->
+  <circle cx="50" cy="50" r="30" fill="#F72585" opacity="0.6"/>
+  <circle cx="350" cy="150" r="40" fill="#7209B7" opacity="0.6"/>
+  
+  <!-- 虚拟办公空间 -->
+  <rect x="50" y="40" width="300" height="120" rx="10" fill="#ffffff" opacity="0.85"/>
+  
+  <!-- 办公桌和椅子 - 左侧 -->
+  <rect x="80" y="90" width="80" height="40" fill="#4CC9F0"/>
+  <rect x="90" y="130" width="60" height="10" fill="#3A0CA3"/>
+  <rect x="95" y="80" width="50" height="10" fill="#F72585"/>
+  
+  <!-- 办公桌和椅子 - 右侧 -->
+  <rect x="240" y="90" width="80" height="40" fill="#4CC9F0"/>
+  <rect x="250" y="130" width="60" height="10" fill="#3A0CA3"/>
+  <rect x="255" y="80" width="50" height="10" fill="#F72585"/>
+  
+  <!-- VR眼镜元素 -->
+  <rect x="160" y="40" width="80" height="40" rx="10" fill="#7209B7"/>
+  <rect x="170" y="50" width="60" height="20" rx="5" fill="#F72585"/>
+  <line x1="200" y1="40" x2="200" y2="80" stroke="#4CC9F0" stroke-width="2"/>
+  
+  <!-- 3D协作元素 -->
+  <polygon points="170,110 200,90 230,110 200,130" fill="#F72585" opacity="0.8"/>
+  <polygon points="180,105 200,95 220,105 200,115" fill="#ffffff"/>
+  
+  <!-- 装饰线条 - 代表VR互动和3D协作 -->
+  <path d="M70 160 Q200 120, 330 160" stroke="#4CC9F0" stroke-width="3" fill="none"/>
+  <path d="M70 170 Q200 140, 330 170" stroke="#7209B7" stroke-width="3" fill="none"/>
+  
+  <!-- 点状装饰 -->
+  <circle cx="120" cy="150" r="5" fill="#F72585"/>
+  <circle cx="200" cy="130" r="5" fill="#4361EE"/>
+  <circle cx="280" cy="150" r="5" fill="#F72585"/>
+  
+  <!-- Meta标志 -->
+  <text x="180" y="185" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff">MetaOffice</text>
+</svg>

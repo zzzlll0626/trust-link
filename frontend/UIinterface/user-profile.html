@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息 - Trust Link</title>
+    <style>
+        /* 基础样式沿用前面页面 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        /* 仪表盘特有样式 */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+        }
+
+        .user-profile {
+            text-align: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 15px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .user-wallet {
+            font-size: 14px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f9fafb;
+        }
+
+        .nav-link.active {
+            background: #f0f4ff;
+            color: #4361ee;
+            border-left: 3px solid #4361ee;
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .profile-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-id {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #f0f4ff;
+            color: #4361ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .stat-text {
+            font-size: 14px;
+        }
+
+        .stat-number {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .edit-button {
+            padding: 10px 15px;
+            background: #f0f4ff;
+            color: #4361ee;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .edit-button:hover {
+            background: #e0e7ff;
+        }
+        
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .info-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .info-list {
+            list-style: none;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+            display: flex;
+        }
+        
+        .info-label {
+            width: 120px;
+            color: #666;
+        }
+        
+        .info-value {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .badge-blue {
+            background: #f0f4ff;
+            color: #4361ee;
+        }
+        
+        .badge-green {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+        
+        .badge-orange {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        
+        .badge-purple {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+        
+        .verification-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .verification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .verification-info {
+            flex: 1;
+        }
+        
+        .verification-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .verification-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .verification-status {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .status-verified {
+            color: #22c55e;
+        }
+        
+        .status-pending {
+            color: #f59e0b;
+        }
+        
+        .status-unverified {
+            color: #666;
+        }
+        
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-date {
+            width: 80px;
+            text-align: center;
+            margin-right: 20px;
+        }
+        
+        .activity-day {
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .activity-month {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .activity-content {
+            flex: 1;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .activity-content::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #eee;
+        }
+        
+        .activity-content::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4361ee;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .activity-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .activity-time {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="user.svg" alt="User Avatar">
+                    </div>
+                    <h3 class="user-name">Tester</h3>
+                    <div class="user-wallet">0x7FaD...3E4b</div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <span class="nav-icon">📊</span>仪表盘
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-investments.html" class="nav-link">
+                            <span class="nav-icon">📈</span>我的投资
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="my-loans.html" class="nav-link">
+                            <span class="nav-icon">📋</span>我的借款
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="asset-management.html" class="nav-link">
+                            <span class="nav-icon">💼</span>资产管理
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transaction-records.html" class="nav-link">
+                            <span class="nav-icon">📝</span>交易记录
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="user-profile.html" class="nav-link active">
+                            <span class="nav-icon">👤</span>个人信息
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="risk-monitoring.html" class="nav-link">
+                            <span class="nav-icon">⚠️</span>风险监控
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="account-settings.html" class="nav-link">
+                            <span class="nav-icon">⚙️</span>账户设置
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">个人信息</h1>
+                    <button class="btn">下载个人数据</button>
+                </div>
+
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <img src="user.svg" alt="Tester">
+                        </div>
+                        <div class="profile-info">
+                            <h2 class="profile-name">Tester</h2>
+                            <div class="profile-id">用户ID: TL58623710 | 注册时间: 2024-08-15</div>
+                            <div class="profile-stats">
+                                <div class="stat-item">
+                                    <div class="stat-icon">📈</div>
+                                    <div class="stat-text">
+                                        <div class="stat-number">8</div>
+                                        <div class="stat-label">投资项目</div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">💰</div>
+                                    <div class="stat-text">
+                                        <div class="stat-number">128.3 ETH</div>
+                                        <div class="stat-label">总投资额</div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">🔄</div>
+                                    <div class="stat-text">
+                                        <div class="stat-number">32</div>
+                                        <div class="stat-label">总交易次数</div>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">⭐</div>
+                                    <div class="stat-text">
+                                        <div class="stat-number">A+</div>
+                                        <div class="stat-label">信用评级</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="edit-button">编辑资料</button>
+                    </div>
+
+                    <div class="profile-grid">
+                        <div class="left-column">
+                            <div class="info-section">
+                                <h3 class="section-title">基本信息</h3>
+                                <ul class="info-list">
+                                    <li class="info-item">
+                                        <div class="info-label">姓名</div>
+                                        <div class="info-value">Tester</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">性别</div>
+                                        <div class="info-value">男</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">出生日期</div>
+                                        <div class="info-value">1988-06-15</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">电子邮箱</div>
+                                        <div class="info-value">zhang.my@example.com</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">手机号码</div>
+                                        <div class="info-value">+86 138****5678</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">所在地区</div>
+                                        <div class="info-value">中国上海</div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="info-section">
+                                <h3 class="section-title">专业背景</h3>
+                                <ul class="info-list">
+                                    <li class="info-item">
+                                        <div class="info-label">职业</div>
+                                        <div class="info-value">技术产品经理</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">公司</div>
+                                        <div class="info-value">科技创新有限公司</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">行业</div>
+                                        <div class="info-value">互联网/科技</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">专业技能</div>
+                                        <div class="info-value">
+                                            <span class="badge badge-blue">区块链技术</span>
+                                            <span class="badge badge-blue">产品管理</span>
+                                            <span class="badge badge-blue">数据分析</span>
+                                            <span class="badge badge-blue">项目管理</span>
+                                            <span class="badge badge-blue">Web3</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="info-section">
+                                <h3 class="section-title">投资偏好</h3>
+                                <ul class="info-list">
+                                    <li class="info-item">
+                                        <div class="info-label">投资领域</div>
+                                        <div class="info-value">
+                                            <span class="badge badge-green">元宇宙</span>
+                                            <span class="badge badge-green">NFT</span>
+                                            <span class="badge badge-green">区块链游戏</span>
+                                            <span class="badge badge-green">DeFi</span>
+                                        </div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">风险偏好</div>
+                                        <div class="info-value">中高风险</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">投资期限</div>
+                                        <div class="info-value">6-24个月</div>
+                                    </li>
+                                    <li class="info-item">
+                                        <div class="info-label">期望收益率</div>
+                                        <div class="info-value">年化15%-25%</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="right-column">
+                            <div class="info-section">
+                                <h3 class="section-title">身份认证</h3>
+                                <div class="verification-item">
+                                    <div class="verification-icon">🆔</div>
+                                    <div class="verification-info">
+                                        <div class="verification-title">实名认证</div>
+                                        <div class="verification-desc">已完成中国居民身份认证</div>
+                                    </div>
+                                    <div class="verification-status status-verified">已认证</div>
+                                </div>
+                                <div class="verification-item">
+                                    <div class="verification-icon">📱</div>
+                                    <div class="verification-info">
+                                        <div class="verification-title">手机认证</div>
+                                        <div class="verification-desc">已绑定手机号 +86 138****5678</div>
+                                    </div>
+                                    <div class="verification-status status-verified">已认证</div>
+                                </div>
+                                <div class="verification-item">
+                                    <div class="verification-icon">📧</div>
+                                    <div class="verification-info">
+                                        <div class="verification-title">邮箱认证</div>
+                                        <div class="verification-desc">已验证邮箱 zhang.my@example.com</div>
+                                    </div>
+                                    <div class="verification-status status-verified">已认证</div>
+                                </div>
+                                <div class="verification-item">
+                                    <div class="verification-icon">💼</div>
+                                    <div class="verification-info">
+                                        <div class="verification-title">职业认证</div>
+                                        <div class="verification-desc">提交职业和收入证明以提高投资额度</div>
+                                    </div>
+                                    <div class="verification-status status-pending">审核中</div>
+                                </div>
+                                <div class="verification-item">
+                                    <div class="verification-icon">🔐</div>
+                                    <div class="verification-info">
+                                        <div class="verification-title">双因素认证</div>
+                                        <div class="verification-desc">启用双因素认证提高账户安全性</div>
+                                    </div>
+                                    <div class="verification-status status-unverified">未设置</div>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h3 class="section-title">最近活动</h3>
+                                <ul class="activity-list">
+                                    <li class="activity-item">
+                                        <div class="activity-date">
+                                            <div class="activity-day">08</div>
+                                            <div class="activity-month">5月</div>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">登录系统</div>
+                                            <div class="activity-desc">通过移动端应用登录系统</div>
+                                            <div class="activity-time">09:45 · IP: 116.23.*.* · 上海</div>
+                                        </div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-date">
+                                            <div class="activity-day">06</div>
+                                            <div class="activity-month">5月</div>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">投资项目</div>
+                                            <div class="activity-desc">投资"MetaOffice空间"项目 35 ETH</div>
+                                            <div class="activity-time">14:32 · IP: 116.23.*.* · 上海</div>
+                                        </div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-date">
+                                            <div class="activity-day">01</div>
+                                            <div class="activity-month">5月</div>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">收到项目收益</div>
+                                            <div class="activity-desc">从"数字艺术NFT展馆"项目收到 0.5 ETH 收益</div>
+                                            <div class="activity-time">09:15 · 自动系统</div>
+                                        </div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-date">
+                                            <div class="activity-day">28</div>
+                                            <div class="activity-month">4月</div>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">转让投资份额</div>
+                                            <div class="activity-desc">转让"虚拟社交平台"项目份额，获得 12.5 ETH</div>
+                                            <div class="activity-time">16:45 · IP: 116.23.*.* · 上海</div>
+                                        </div>
+                                    </li>
+                                    <li class="activity-item">
+                                        <div class="activity-date">
+                                            <div class="activity-day">20</div>
+                                            <div class="activity-month">4月</div>
+                                        </div>
+                                        <div class="activity-content">
+                                            <div class="activity-title">存入资金</div>
+                                            <div class="activity-desc">向平台钱包存入 50 ETH</div>
+                                            <div class="activity-time">11:22 · IP: 116.23.*.* · 上海</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

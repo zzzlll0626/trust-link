@@ -1,0 +1,83 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 渐变背景 -->
+  <defs>
+    <linearGradient id="socialGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FC5C7D" />
+      <stop offset="50%" stop-color="#6A82FB" />
+      <stop offset="100%" stop-color="#05DFD7" />
+    </linearGradient>
+    <radialGradient id="connectionGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#05DFD7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#05DFD7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="200" fill="url(#socialGradient)" opacity="0.2"/>
+  <circle cx="200" cy="100" r="80" fill="url(#connectionGlow)"/>
+  
+  <!-- 连接的社交网络 -->
+  <circle cx="120" cy="80" r="30" fill="#FC5C7D" opacity="0.7"/>
+  <circle cx="200" cy="60" r="25" fill="#B264FC" opacity="0.7"/>
+  <circle cx="280" cy="80" r="30" fill="#6A82FB" opacity="0.7"/>
+  <circle cx="160" cy="130" r="28" fill="#1BFFB2" opacity="0.7"/>
+  <circle cx="240" cy="120" r="28" fill="#05DFD7" opacity="0.7"/>
+  
+  <!-- 连接线 - 发光效果 -->
+  <line x1="120" y1="80" x2="200" y2="60" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  <line x1="200" y1="60" x2="280" y2="80" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  <line x1="120" y1="80" x2="160" y2="130" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  <line x1="160" y1="130" x2="240" y2="120" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  <line x1="240" y1="120" x2="280" y2="80" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  <line x1="200" y1="60" x2="240" y2="120" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  <line x1="200" y1="60" x2="160" y2="130" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+  
+  <!-- 数据流动效果 -->
+  <circle cx="150" cy="70" r="3" fill="#FFFFFF">
+    <animate attributeName="cx" from="120" to="200" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="cy" from="80" to="60" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="220" cy="70" r="3" fill="#FFFFFF">
+    <animate attributeName="cx" from="200" to="280" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="cy" from="60" to="80" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  
+  <circle cx="260" cy="100" r="3" fill="#FFFFFF">
+    <animate attributeName="cx" from="240" to="280" dur="2.5s" repeatCount="indefinite"/>
+    <animate attributeName="cy" from="120" to="80" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- 用户头像 - 发光边框 -->
+  <circle cx="120" cy="80" r="15" fill="#FFFFFF" stroke="#FC5C7D" stroke-width="2"/>
+  <circle cx="200" cy="60" r="12" fill="#FFFFFF" stroke="#B264FC" stroke-width="2"/>
+  <circle cx="280" cy="80" r="15" fill="#FFFFFF" stroke="#6A82FB" stroke-width="2"/>
+  <circle cx="160" cy="130" r="14" fill="#FFFFFF" stroke="#1BFFB2" stroke-width="2"/>
+  <circle cx="240" cy="120" r="14" fill="#FFFFFF" stroke="#05DFD7" stroke-width="2"/>
+  
+  <!-- 用户图标 - 多彩版 -->
+  <circle cx="120" cy="75" r="3" fill="#FC5C7D"/>
+  <circle cx="115" cy="85" r="3" fill="#FC5C7D"/>
+  <circle cx="125" cy="85" r="3" fill="#FC5C7D"/>
+  
+  <circle cx="200" cy="55" r="3" fill="#B264FC"/>
+  <circle cx="195" cy="65" r="3" fill="#B264FC"/>
+  <circle cx="205" cy="65" r="3" fill="#B264FC"/>
+  
+  <circle cx="280" cy="75" r="3" fill="#6A82FB"/>
+  <circle cx="275" cy="85" r="3" fill="#6A82FB"/>
+  <circle cx="285" cy="85" r="3" fill="#6A82FB"/>
+  
+  <circle cx="160" cy="125" r="3" fill="#1BFFB2"/>
+  <circle cx="155" cy="135" r="3" fill="#1BFFB2"/>
+  <circle cx="165" cy="135" r="3" fill="#1BFFB2"/>
+  
+  <circle cx="240" cy="115" r="3" fill="#05DFD7"/>
+  <circle cx="235" cy="125" r="3" fill="#05DFD7"/>
+  <circle cx="245" cy="125" r="3" fill="#05DFD7"/>
+  
+  
+  <!-- 装饰元素 -->
+  <polygon points="40,30 50,15 60,30" fill="#FC5C7D" opacity="0.8"/>
+  <polygon points="340,30 350,15 360,30" fill="#6A82FB" opacity="0.8"/>
+  <circle cx="50" cy="170" r="10" fill="#1BFFB2" opacity="0.6"/>
+  <circle cx="350" cy="170" r="10" fill="#05DFD7" opacity="0.6"/>
+</svg>

@@ -1,0 +1,247 @@
+<!-- upload-verification.html - 交易证明上传界面 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>上传交易证明 - Trust Link Lending</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function changeUploadMethod(method) {
+      document.getElementById('api-upload').style.display = method === 'api' ? 'block' : 'none';
+      document.getElementById('manual-upload').style.display = method === 'manual' ? 'block' : 'none';
+      
+      document.getElementById('api-button').className = method === 'api' 
+        ? 'px-4 py-2 text-sm font-medium rounded-l-md bg-indigo-600 text-white'
+        : 'px-4 py-2 text-sm font-medium rounded-l-md bg-gray-100 text-gray-700 hover:bg-gray-200';
+      
+      document.getElementById('manual-button').className = method === 'manual' 
+        ? 'px-4 py-2 text-sm font-medium rounded-r-md bg-indigo-600 text-white'
+        : 'px-4 py-2 text-sm font-medium rounded-r-md bg-gray-100 text-gray-700 hover:bg-gray-200';
+    }
+    
+    function handleFileSelect() {
+      const fileInput = document.getElementById('file-upload');
+      const fileNameDisplay = document.getElementById('file-name');
+      
+      if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = '已选择: ' + fileInput.files[0].name;
+        fileNameDisplay.style.display = 'block';
+      }
+    }
+    
+    function uploadVerification() {
+      const apiMethod = document.getElementById('api-upload').style.display !== 'none';
+      
+      if (!apiMethod) {
+        const fileInput = document.getElementById('file-upload');
+        if (fileInput.files.length === 0) {
+          alert('请先选择文件');
+          return;
+        }
+      }
+      
+      alert('凭证上传成功，正在验证...');
+    }
+    
+    function deleteVerification(id) {
+      const element = document.getElementById('verification-' + id);
+      if (element) {
+        element.remove();
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <!-- 顶部导航栏 - 简化版 -->
+  <nav class="bg-indigo-600 text-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="text-xl font-bold">Trust Link Lending</div>
+        </div>
+        <div class="flex items-center">
+          <div class="text-sm mr-2">0x71C...3E6F</div>
+          <div class="w-8 h-8 rounded-full bg-indigo-400"></div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-6">
+      <a href="credit-center.html" class="text-indigo-600 hover:text-indigo-800">
+        &larr; 返回信用中心
+      </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-200">
+        <h1 class="text-xl font-semibold text-gray-900">上传交易证明 - 提升您的信用评分</h1>
+        <p class="mt-1 text-sm text-gray-600">
+          通过安全上传您的交易证明，可以提高信用评分并获得更优惠的借贷条件
+        </p>
+      </div>
+
+      <div class="px-6 py-5">
+        <!-- 上传方式选择 -->
+        <div class="mb-6">
+          <div class="flex mb-4">
+            <button
+              id="api-button"
+              class="px-4 py-2 text-sm font-medium rounded-l-md bg-indigo-600 text-white"
+              onclick="changeUploadMethod('api')"
+            >
+              自动API验证
+            </button>
+            <button
+              id="manual-button"
+              class="px-4 py-2 text-sm font-medium rounded-r-md bg-gray-100 text-gray-700 hover:bg-gray-200"
+              onclick="changeUploadMethod('manual')"
+            >
+              手动上传VC凭证
+            </button>
+          </div>
+
+          <!-- API验证选项 -->
+          <div id="api-upload" class="bg-gray-50 p-5 rounded-md">
+            <h3 class="text-lg font-medium text-gray-900 mb-3">连接第三方平台账户</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              授权连接您的NFTScan、Etherscan等账户，我们将自动获取您的交易历史数据，通过安全加密方式使用。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <span class="mr-2">连接 NFTScan</span>
+                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <span class="mr-2">连接 Etherscan</span>
+                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <button class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <span class="mr-2">连接 Dune Analytics</span>
+                <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 手动上传选项 -->
+          <div id="manual-upload" class="bg-gray-50 p-5 rounded-md" style="display: none;">
+            <h3 class="text-lg font-medium text-gray-900 mb-3">上传VC凭证文件</h3>
+            <p class="text-sm text-gray-600 mb-4">
+              支持的凭证类型：Verifiable Credentials (VC)、JSON-LD格式交易证明、已签名的交易记录
+            </p>
+
+            <!-- 文件上传区域 -->
+            <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-md">
+              <div class="space-y-1 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <div class="flex text-sm text-gray-600">
+                  <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500">
+                    <span>选择文件</span>
+                    <input 
+                      id="file-upload" 
+                      name="file-upload" 
+                      type="file" 
+                      class="sr-only"
+                      onchange="handleFileSelect()"
+                    />
+                  </label>
+                  <p class="pl-1">或拖放文件到此处</p>
+                </div>
+                <p class="text-xs text-gray-500">支持 .json, .jsonld, .vc 文件</p>
+                <p id="file-name" class="text-sm text-indigo-600 mt-2" style="display: none;"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 隐私保护说明 -->
+        <div class="bg-yellow-50 p-4 rounded-md mb-6">
+          <h3 class="text-md font-medium text-yellow-800 mb-1">隐私保护说明</h3>
+          <ul class="list-disc pl-5 text-sm text-yellow-700 space-y-1">
+            <li>您的数据将使用分布式加密存储方式保存，只有您拥有解密密钥</li>
+            <li>我们只获取验证结果，无法查看您的原始交易数据内容</li>
+            <li>您可以随时删除已上传的凭证，撤销授权</li>
+            <li>数据仅用于信用评估，不会用于其他商业用途</li>
+          </ul>
+        </div>
+
+        <!-- 上传历史 -->
+        <div class="mb-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">上传历史</h3>
+          
+          <div class="bg-white shadow overflow-hidden rounded-md">
+            <ul class="divide-y divide-gray-200">
+              <li id="verification-1" class="px-4 py-4 flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900">NFTScan API</p>
+                  <div class="flex mt-1">
+                    <p class="text-sm text-gray-500 mr-4">2025-05-07</p>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      已验证
+                    </span>
+                  </div>
+                </div>
+                <button 
+                  onclick="deleteVerification(1)"
+                  class="text-red-600 hover:text-red-900"
+                >
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </li>
+              <li id="verification-2" class="px-4 py-4 flex items-center justify-between">
+                <div>
+                  <p class="text-sm font-medium text-gray-900">交易记录VC</p>
+                  <div class="flex mt-1">
+                    <p class="text-sm text-gray-500 mr-4">2025-05-01</p>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      已验证
+                    </span>
+                  </div>
+                </div>
+                <button 
+                  onclick="deleteVerification(2)"
+                  class="text-red-600 hover:text-red-900"
+                >
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex space-x-4">
+          <button 
+            onclick="uploadVerification()"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+          >
+            上传并验证
+          </button>
+          <a 
+            href="credit-center.html"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
+          >
+            取消
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

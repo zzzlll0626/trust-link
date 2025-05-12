@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借款申请 - 风险评估 | Trust Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        /* 借款申请页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .page-description {
+            max-width: 800px;
+            color: #666;
+        }
+        
+        .application-container {
+            padding: 40px 0 80px;
+        }
+        
+        .application-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .application-steps::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 20%;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .step.active .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .step.active .step-label {
+            color: #4361ee;
+            font-weight: 500;
+        }
+        
+        .application-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-required {
+            color: #e53e3e;
+            margin-left: 5px;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-hint {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .risk-overview {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .risk-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        
+        .risk-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-value {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #f8d64e;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .risk-meter {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .risk-indicator {
+            position: absolute;
+            left: 65%;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            background: #f8d64e;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .risk-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .risk-factors {
+            margin-top: 30px;
+        }
+        
+        .risk-factor {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .factor-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .factor-name {
+            font-weight: 500;
+        }
+        
+        .factor-rating {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .rating-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+        
+        .rating-dot.filled {
+            background: #4361ee;
+        }
+        
+        .factor-description {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .risk-comparison {
+            margin-top: 20px;
+        }
+        
+        .comparison-chart {
+            height: 200px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #ddd;
+        }
+        
+        .recommendation-card {
+            background: #f0f4ff;
+            border-left: 4px solid #4361ee;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 30px;
+        }
+        
+        .recommendation-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #4361ee;
+        }
+        
+        .recommendations-list {
+            margin-top: 20px;
+        }
+        
+        .recommendation-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .recommendation-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .recommendation-icon {
+            width: 40px;
+            height: 40px;
+            background: #e0e7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4361ee;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .voting-mechanism {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .voting-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .voting-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-input {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+        
+        .risk-info {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .risk-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .risk-list {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo">
+                    <span>Trust Link</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">借款申请</h1>
+            <p class="page-description">通过Trust Link平台为您的元宇宙项目获取融资，只需完成以下申请步骤，我们将对您的项目进行评估，并为您匹配合适的投资者。</p>
+        </div>
+    </section>
+    
+    <section class="application-container">
+        <div class="container">
+            <div class="application-steps">
+                <div class="step completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">项目信息</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">融资需求</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">抵押设置</div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">风险评估</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">提交审核</div>
+                </div>
+            </div>
+            
+            <div class="application-form">
+                <div class="form-section">
+                    <h2 class="form-title">项目风险评估</h2>
+                    <p>基于您之前提供的信息，我们对您的项目进行了初步风险评估。请查看以下结果并完成风险确认。</p>
+                    
+                    <div class="risk-overview">
+                        <div class="risk-header">
+                            <h3 class="risk-title">风险综合评分</h3>
+                            <div class="risk-score">
+                                <div class="score-value">B</div>
+                                <div class="score-label">中等风险</div>
+                            </div>
+                        </div>
+                        
+                        <div class="risk-meter">
+                            <div class="risk-indicator"></div>
+                        </div>
+                        <div class="risk-labels">
+                            <div>低风险</div>
+                            <div>中低风险</div>
+                            <div>中等风险</div>
+                            <div>中高风险</div>
+                            <div>高风险</div>
+                        </div>
+                        
+                        <div class="risk-factors">
+                            <h4 style="margin-bottom: 15px;">风险因素分析</h4>
+                            
+                            <div class="risk-factor">
+                                <div class="factor-header">
+                                    <div class="factor-name">项目阶段风险</div>
+                                    <div class="factor-rating">
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot"></div>
+                                        <div class="rating-dot"></div>
+                                        <div class="rating-dot"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-description">
+                                    项目处于Beta测试阶段，已有基本产品但尚未正式上线，风险相对较低。
+                                </div>
+                            </div>
+                            
+                            <div class="risk-factor">
+                                <div class="factor-header">
+                                    <div class="factor-name">团队经验风险</div>
+                                    <div class="factor-rating">
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot"></div>
+                                        <div class="rating-dot"></div>
+                                        <div class="rating-dot"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-description">
+                                    核心团队成员拥有相关行业经验，但在元宇宙领域的经验相对有限。
+                                </div>
+                            </div>
+                            
+                            <div class="risk-factor">
+                                <div class="factor-header">
+                                    <div class="factor-name">市场需求风险</div>
+                                    <div class="factor-rating">
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot"></div>
+                                        <div class="rating-dot"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-description">
+                                    项目定位于新兴市场，需求存在一定不确定性，但有初步市场验证。
+                                </div>
+                            </div>
+                            
+                            <div class="risk-factor">
+                                <div class="factor-header">
+                                    <div class="factor-name">技术实现风险</div>
+                                    <div class="factor-rating">
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-description">
+                                    项目涉及较为复杂的技术实现，存在一定的技术挑战和不确定性。
+                                </div>
+                            </div>
+                            
+                            <div class="risk-factor">
+                                <div class="factor-header">
+                                    <div class="factor-name">财务规划风险</div>
+                                    <div class="factor-rating">
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot filled"></div>
+                                        <div class="rating-dot"></div>
+                                        <div class="rating-dot"></div>
+                                    </div>
+                                </div>
+                                <div class="factor-description">
+                                    财务规划较为合理，但收入预期略显乐观，盈亏平衡时间可能延后。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="risk-comparison">
+                        <h3 style="margin-bottom: 15px;">风险与同类项目对比</h3>
+                        <div class="comparison-chart">
+                            <p>风险对比图表</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendation-card">
+                        <h3 class="recommendation-title">风险优化建议</h3>
+                        <p>基于风险评估结果，我们提供以下优化建议，以降低项目风险并提高融资成功率：</p>
+                        
+                        <div class="recommendations-list">
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">💡</div>
+                                <div>
+                                    <strong>增加测试用户验证</strong>
+                                    <p>建议在正式上线前增加更多的用户测试环节，收集用户反馈并优化产品体验，进一步验证市场需求。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">👥</div>
+                                <div>
+                                    <strong>引入行业顾问</strong>
+                                    <p>考虑引入具有元宇宙领域经验的行业顾问或专家，弥补团队在该领域经验的不足。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="recommendation-icon">📊</div>
+                                <div>
+                                    <strong>优化财务规划</strong>
+                                    <p>建议调整收入预期，制定更保守的财务计划，延长盈亏平衡预期时间，增加财务缓冲。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">风险共识机制</h2>
+                    <div class="voting-mechanism">
+                        <h3 class="voting-title">社区投票决策机制</h3>
+                        <p class="voting-description">
+                            Trust Link平台采用基于拜占庭容错的社区投票决策机制，当项目亏损超过一定阈值（默认为40%）时，将触发投资者投票，决定项目是否继续。此机制能够在项目出现重大风险时保护投资者权益，同时给予借款人改进项目的机会。
+                        </p>
+                        
+                        <div class="form-group">
+                            <label class="form-label">投票触发阈值<span class="form-required">*</span></label>
+                            <select class="form-select">
+                                <option value="30">30%（保守）</option>
+                                <option value="40" selected>40%（推荐）</option>
+                                <option value="50">50%（激进）</option>
+                            </select>
+                            <span class="form-hint">当项目亏损达到此阈值时，将触发投资者投票决策</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">投票期限<span class="form-required">*</span></label>
+                            <select class="form-select">
+                                <option value="3">3天</option>
+                                <option value="5" selected>5天</option>
+                                <option value="7">7天</option>
+                            </select>
+                            <span class="form-hint">触发投票后，投资者可在此期限内参与投票</span>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="voting-agree" class="checkbox-input" checked>
+                            <label for="voting-agree">我了解并同意社区投票决策机制，当项目亏损达到触发阈值时，将由投资者投票决定项目是否继续</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">风险确认</h2>
+                    <p style="margin-bottom: 20px;">请确认您已了解并接受以下风险：</p>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="risk-1" class="checkbox-input">
+                        <label for="risk-1">我了解此次评估结果为初步评估，最终风险等级可能随项目发展而变化</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="risk-2" class="checkbox-input">
+                        <label for="risk-2">我了解元宇宙项目存在市场风险，市场需求和用户接受度可能不及预期</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="risk-3" class="checkbox-input">
+                        <label for="risk-3">我了解抵押资产价格波动可能导致清算风险，并同意在抵押品价值下跌至清算阈值时接受清算</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="risk-4" class="checkbox-input">
+                        <label for="risk-4">我了解并接受项目亏损超过触发阈值时将启动投票机制，并尊重投票结果</label>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="risk-5" class="checkbox-input">
+                        <label for="risk-5">我了解并同意平台将监控资金使用情况，确保资金用于申报的项目用途</label>
+                    </div>
+                </div>
+                
+                <div class="risk-info">
+                    <h3 class="risk-title">风险评估须知</h3>
+                    <ul class="risk-list">
+                        <li>风险评估结果基于您提供的信息及平台数据分析，仅供参考，不构成任何投资建议</li>
+                        <li>风险等级仅反映项目相对风险，不代表项目成功或失败的绝对概率</li>
+                        <li>投资者将基于风险评估结果及自身风险偏好决定是否投资，风险等级较高的项目可能需要提供更高收益率以吸引投资</li>
+                        <li>社区投票决策机制是平台风险控制的重要环节，确保在项目发生重大风险时投资者能够参与决策</li>
+                        <li>平台将持续监控项目运营情况，并在风险发生显著变化时更新风险评级</li>
+                    </ul>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="loan-collateral.html" class="btn btn-secondary">上一步</a>
+                    <a href="loan-submission.html" class="btn">下一步</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.checkbox-input');
+            const nextButton = document.querySelector('.form-actions .btn:not(.btn-secondary)');
+            
+            function updateNextButtonState() {
+                const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+                nextButton.style.opacity = allChecked ? '1' : '0.5';
+                nextButton.style.pointerEvents = allChecked ? 'auto' : 'none';
+            }
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateNextButtonState);
+            });
+            
+            updateNextButtonState();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>身份信息绑定 - Trust Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .page-description {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+        }
+        
+        .verification-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        .verification-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+        
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background-color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ddd;
+        }
+        
+        .progress-step.active {
+            border-color: #4361ee;
+            background-color: #4361ee;
+            color: white;
+        }
+        
+        .progress-step.completed {
+            border-color: #38b2ac;
+            background-color: #38b2ac;
+            color: white;
+        }
+        
+        .progress-step-label {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .active .progress-step-label,
+        .completed .progress-step-label {
+            color: #4361ee;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-input:focus {
+            border-color: #4361ee;
+            outline: none;
+        }
+        
+        .form-error {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-hint {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .document-upload {
+            margin-bottom: 30px;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            border-color: #4361ee;
+            background: #f7f9ff;
+        }
+        
+        .upload-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #f0f5ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-area input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .file-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f5ff;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .btn-large {
+            padding: 14px 28px;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .verification-methods {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .verification-method {
+            flex: 1;
+            margin: 0 10px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .verification-method:hover,
+        .verification-method.active {
+            border-color: #4361ee;
+            background: #f7f9ff;
+        }
+        
+        .verification-method-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .verification-method-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .verification-method-description {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .steps-container {
+            margin-top: 40px;
+        }
+        
+        .step {
+            display: none;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        /* 处理中状态 */
+        .processing {
+            text-align: center;
+            padding: 40px 0;
+            display: none;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border: 5px solid rgba(74, 85, 238, 0.2);
+            border-radius: 50%;
+            border-top-color: #4361ee;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 成功状态 */
+        .success-message {
+            text-align: center;
+            padding: 40px 0;
+            display: none;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background-color: #38b2ac;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+        
+        /* 身份验证相关指标 */
+        .verification-metrics {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0fdf4;
+            border-radius: 8px;
+            border: 1px solid #d1fae5;
+        }
+        
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #d1fae5;
+        }
+        
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            display: flex;
+            align-items: center;
+        }
+        
+        .metric-icon {
+            margin-right: 10px;
+            color: #38b2ac;
+        }
+        
+        .metric-value {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="/api/placeholder/40/40" alt="Trust Link Logo">
+                    <span>Trust Link</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">项目浏览</a></li>
+                    <li><a href="#">借款申请</a></li>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#" class="btn">连接钱包</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">身份信息绑定</h1>
+            <p class="page-description">完成身份认证，将您的DID与真实身份进行绑定</p>
+        </div>
+    </section>
+    
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-step completed">
+                ✓
+                <span class="progress-step-label">连接钱包</span>
+            </div>
+            <div class="progress-step active">
+                2
+                <span class="progress-step-label">身份验证</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="verification-container">
+            <h2 class="verification-title">身份信息绑定</h2>
+            
+            <p style="margin-bottom: 30px; text-align: center;">请选择身份验证方式，绑定您的DID与真实身份。所有身份信息将经过加密处理，只存储哈希希值，原始数据不会上传至区块链。</p>
+            
+            <div class="verification-methods">
+                <div class="verification-method active" data-method="id-card">
+                    <div class="verification-method-icon">📄</div>
+                    <div class="verification-method-title">政府颁发ID</div>
+                    <div class="verification-method-description">使用护照、身份证或驾照进行验证</div>
+                </div>
+                
+                <div class="verification-method" data-method="address">
+                    <div class="verification-method-icon">🏠</div>
+                    <div class="verification-method-title">居住证明</div>
+                    <div class="verification-method-description">使用水电费账单或银行对账单验证</div>
+                </div>
+            </div>
+            
+            <div class="steps-container">
+                <!-- 身份证验证步骤 -->
+                <div id="id-card-steps" class="step active">
+                    <form id="id-card-form">
+                        <div class="form-group">
+                            <label class="form-label">证件类型</label>
+                            <select class="form-input">
+                                <option value="passport">护照</option>
+                                <option value="id-card" selected>身份证</option>
+                                <option value="driver-license">驾照</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">证件号码</label>
+                            <input type="text" class="form-input" placeholder="输入证件号码">
+                        </div>
+                        
+                        <div class="form-group document-upload">
+                            <label class="form-label">点击或拖拽上传证件照片</label>
+                            <div class="upload-area">
+                                <div class="upload-icon">
+                                    <img src="/api/placeholder/40/40" alt="Upload Document">
+                                </div>
+                                <p>选择文件</p>
+                                <input type="file" accept="image/jpeg, image/png">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-large">提交验证</button>
+                    </form>
+                </div>
+                
+                <!-- 居住证明验证步骤 -->
+                <div id="address-steps" class="step">
+                    <form id="address-form">
+                        <div class="form-group">
+                            <label class="form-label">证明类型</label>
+                            <select class="form-input">
+                                <option value="utility">水电费账单</option>
+                                <option value="bank">银行对账单</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">账单日期</label>
+                            <input type="date" class="form-input">
+                            <div class="form-hint">请使用最近3个月内的账单</div>
+                        </div>
+                        
+                        <div class="form-group document-upload">
+                            <label class="form-label">点击或拖拽上传证明文件</label>
+                            <div class="upload-area">
+                                <div class="upload-icon">
+                                    <img src="/api/placeholder/40/40" alt="Upload Document">
+                                </div>
+                                <p>选择文件</p>
+                                <input type="file" accept="image/jpeg, image/png, application/pdf">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-large">提交验证</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 处理中状态 -->
+            <div id="processing" class="processing">
+                <div class="spinner"></div>
+                <h3>正在验证您的身份信息</h3>
+                <p style="margin-top: 15px; color: #666;">这可能需要几秒钟时间，请耐心等待...</p>
+            </div>
+            
+            <!-- 成功状态 -->
+            <div id="success-message" class="success-message">
+                <div class="success-icon">✓</div>
+                <h3>身份绑定成功！</h3>
+                <p style="margin-top: 15px;">您的身份已经成功绑定到DID，现在可以使用平台的全部功能</p>
+                
+                <div class="verification-metrics">
+                    <div class="metric-item">
+                        <div class="metric-label">
+                            <span class="metric-icon">✓</span>
+                            <span>身份验证状态</span>
+                        </div>
+                        <div class="metric-value">已验证</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">
+                            <span class="metric-icon">✓</span>
+                            <span>DID绑定</span>
+                        </div>
+                        <div class="metric-value">已完成</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">
+                            <span class="metric-icon">✓</span>
+                            <span>数据安全级别</span>
+                        </div>
+                        <div class="metric-value">加密保护</div>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 30px;">现在您可以进入平台，浏览项目或发起贷款申请</p>
+                <a href="credit-center.html" class="btn btn-large">进入平台</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 验证方式切换
+            const verificationMethods = document.querySelectorAll('.verification-method');
+            const idCardSteps = document.getElementById('id-card-steps');
+            const addressSteps = document.getElementById('address-steps');
+            
+            verificationMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // 移除所有active类
+                    verificationMethods.forEach(m => m.classList.remove('active'));
+                    
+                    // 为当前点击添加active类
+                    this.classList.add('active');
+                    
+                    // 显示对应步骤
+                    const methodType = this.getAttribute('data-method');
+                    if (methodType === 'id-card') {
+                        idCardSteps.classList.add('active');
+                        addressSteps.classList.remove('active');
+                    } else if (methodType === 'address') {
+                        addressSteps.classList.add('active');
+                        idCardSteps.classList.remove('active');
+                    }
+                });
+            });
+            
+            // 文件上传处理
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            
+            uploadAreas.forEach(area => {
+                const input = area.querySelector('input[type="file"]');
+                input.addEventListener('change', function() {
+                    if (this.files.length > 0) {
+                        area.classList.add('has-file');
+                        const fileName = this.files[0].name;
+                        const fileInfoText = document.createElement('div');
+                        fileInfoText.className = 'file-info';
+                        fileInfoText.innerHTML = `已选择: <strong>${fileName}</strong>`;
+                        
+                        // 移除之前的文件信息
+                        const existingInfo = area.querySelector('.file-info');
+                        if (existingInfo) {
+                            existingInfo.remove();
+                        }
+                        
+                        area.appendChild(fileInfoText);
+                    }
+                });
+            });
+            
+            // 表单提交处理 - 直接跳转到信用中心
+            const forms = document.querySelectorAll('form');
+            
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 可选：显示处理中状态
+                    const stepsContainer = document.querySelector('.steps-container');
+                    const processing = document.getElementById('processing');
+                    
+                    stepsContainer.style.display = 'none';
+                    processing.style.display = 'block';
+                    
+                    // 2秒后跳转到信用中心页面
+                    setTimeout(() => {
+                        window.location.href = 'credit-center.html';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

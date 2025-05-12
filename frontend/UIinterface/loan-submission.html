@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借款申请 - 提交审核 | Trust Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        /* 借款申请页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .page-description {
+            max-width: 800px;
+            color: #666;
+        }
+        
+        .application-container {
+            padding: 40px 0 80px;
+        }
+        
+        .application-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .application-steps::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 20%;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .step.active .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .step.active .step-label {
+            color: #4361ee;
+            font-weight: 500;
+        }
+        
+        .application-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-section {
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-header {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .summary-item {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            width: 200px;
+            color: #666;
+        }
+        
+        .summary-value {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .edit-link {
+            color: #4361ee;
+            font-size: 14px;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+        
+        .review-process {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .process-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            background: #f0f4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #4361ee;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-name {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .step-description {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .submit-btn {
+            padding: 15px 40px;
+            font-size: 18px;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            margin: 40px 0;
+            background: #f0f9ff;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #38a169;
+            margin-bottom: 20px;
+        }
+        
+        .success-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #38a169;
+        }
+        
+        .success-description {
+            font-size: 16px;
+            color: #666;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .note-box {
+            padding: 20px;
+            background: #fef9c3;
+            border-left: 4px solid #f59e0b;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        
+        .note-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .note-content {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .review-card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .review-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .review-content {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .time-estimate {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            color: #666;
+        }
+        
+        .time-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        
+        .risk-info {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .risk-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .risk-list {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">借款申请</h1>
+            <p class="page-description">通过Trust Link平台为您的元宇宙项目获取融资，只需完成以下申请步骤，我们将对您的项目进行评估，并为您匹配合适的投资者。</p>
+        </div>
+    </section>
+    
+    <section class="application-container">
+        <div class="container">
+            <div class="application-steps">
+                <div class="step completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">项目信息</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">融资需求</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">抵押设置</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">风险评估</div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">提交审核</div>
+                </div>
+            </div>
+            
+            <div class="application-form">
+                <div id="application-summary">
+                    <div class="form-section">
+                        <h2 class="form-title">申请信息确认</h2>
+                        <p style="margin-bottom: 20px;">请仔细核对以下申请信息，确认无误后提交审核。</p>
+                        
+                        <div class="summary-section">
+                            <h3 class="summary-header">项目基本信息</h3>
+                            <div class="summary-item">
+                                <div class="summary-label">项目名称</div>
+                                <div class="summary-value">MetaOffice空间<a href="loan-application.html" class="edit-link">编辑</a></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">项目类型</div>
+                                <div class="summary-value">虚拟办公</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">发展阶段</div>
+                                <div class="summary-value">最小可行产品</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">团队人数</div>
+                                <div class="summary-value">6-15人</div>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-section">
+                            <h3 class="summary-header">融资需求</h3>
+                            <div class="summary-item">
+                                <div class="summary-label">融资类型</div>
+                                <div class="summary-value">一次性融资<a href="loan-financing.html" class="edit-link">编辑</a></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">融资金额</div>
+                                <div class="summary-value">50 ETH</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">融资期限</div>
+                                <div class="summary-value">12个月</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">预期年化收益率</div>
+                                <div class="summary-value">12%</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">还款计划</div>
+                                <div class="summary-value">季度付息，到期还本</div>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-section">
+                            <h3 class="summary-header">抵押设置</h3>
+                            <div class="summary-item">
+                                <div class="summary-label">抵押类型</div>
+                                <div class="summary-value">数字货币抵押<a href="loan-collateral.html" class="edit-link">编辑</a></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">抵押率</div>
+                                <div class="summary-value">60%</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">需缴抵押品</div>
+                                <div class="summary-value">30 ETH</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">清算阈值</div>
+                                <div class="summary-value">70%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-section">
+                            <h3 class="summary-header">风险评估</h3>
+                            <div class="summary-item">
+                                <div class="summary-label">项目整体风险评分</div>
+                                <div class="summary-value">65（中等风险）<a href="loan-risk-assessment.html" class="edit-link">查看详情</a></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">压力测试结果</div>
+                                <div class="summary-value">通过2/3场景测试</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-label">项目治理设置</div>
+                                <div class="summary-value">已启用自动预警机制</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h2 class="form-title">审核流程</h2>
+                        <p style="margin-bottom: 20px;">以下是平台审核流程，请耐心等待。审核通过后，您的项目将在平台上线并开始融资。</p>
+                        
+                        <div class="review-process">
+                            <div class="process-step">
+                                <div class="step-icon">1</div>
+                                <div class="step-name">提交申请</div>
+                                <div class="step-description">填写并提交完整的借款申请</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-icon">2</div>
+                                <div class="step-name">初步审核</div>
+                                <div class="step-description">平台对申请资料进行初步审核</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-icon">3</div>
+                                <div class="step-name">项目评估</div>
+                                <div class="step-description">专业评估团队进行深入评估</div>
+                            </div>
+                            <div class="process-step">
+                                <div class="step-icon">4</div>
+                                <div class="step-name">项目上线</div>
+                                <div class="step-description">通过审核后项目在平台发布</div>
+                            </div>
+                        </div>
+                        
+                        <div class="review-card">
+                            <h3 class="review-title">初步审核（1-2个工作日）</h3>
+                            <p class="review-content">平台将对您提交的申请资料进行初步审核，包括资料完整性、项目合规性、申请人身份验证等。如资料有缺失或不符合要求，平台将通过您的注册邮箱或平台消息通知您补充完善。</p>
+                        </div>
+                        
+                        <div class="review-card">
+                            <h3 class="review-title">项目评估（3-5个工作日）</h3>
+                            <p class="review-content">通过初步审核后，项目将进入专业评估阶段。评估团队将对项目的市场前景、技术可行性、团队背景、财务模型等方面进行全面评估。在此阶段，平台可能会安排线上会议，深入了解项目情况。</p>
+                        </div>
+                        
+                        <div class="review-card">
+                            <h3 class="review-title">项目上线（评估通过后1-2个工作日）</h3>
+                            <p class="review-content">项目评估通过后，平台将根据评估结果确定最终的融资方案，包括融资额度、期限、利率等，并与您确认。确认无误后，项目将在平台上线，向投资者开放投资。</p>
+                        </div>
+                        
+                        <div class="time-estimate">
+                            <div class="time-icon">⏱️</div>
+                            <div>预计总审核时间：5-9个工作日</div>
+                        </div>
+                        
+                        <div class="note-box">
+                            <div class="note-title">
+                                <span>📝</span>
+                                <span>审核提示</span>
+                            </div>
+                            <div class="note-content">
+                                <p>为提高审核效率，请确保您提交的资料真实、准确、完整。特别是项目白皮书、团队背景、财务模型等核心资料，将直接影响审核结果。</p>
+                                <p>审核过程中，请保持注册手机和邮箱畅通，以便平台及时与您联系。如有任何疑问，可通过平台客服或您的专属客户经理与我们沟通。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="submit-section">
+                        <button class="btn submit-btn" id="submit-application">提交申请</button>
+                    </div>
+                </div>
+                
+                <div id="success-message" class="success-message">
+                    <div class="success-icon">✓</div>
+                    <h2 class="success-title">申请已成功提交</h2>
+                    <p class="success-description">您的借款申请已成功提交，请耐心等待平台审核。我们将通过邮件和平台消息通知您审核进展。</p>
+                    <div>
+                        <a href="dashboard.html" class="btn">查看申请状态</a>
+                    </div>
+                </div>
+                
+                <div class="risk-info">
+                    <h3 class="risk-title">温馨提示</h3>
+                    <ul class="risk-list">
+                        <li>提交申请后，您仍可在审核期间通过账户中心查看申请进度</li>
+                        <li>如需修改申请资料，可在初步审核阶段联系客服进行调整</li>
+                        <li>平台将加密存储您的所有申请资料，保障信息安全</li>
+                        <li>项目上线后，您可通过智能合约查看资金流向和使用情况</li>
+                        <li>为了保障投资者利益，项目资金将按计划用于项目开发，不得挪作他用</li>
+                    </ul>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="loan-application-step4.html" class="btn btn-secondary">上一步</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const submitBtn = document.getElementById('submit-application');
+            const applicationSummary = document.getElementById('application-summary');
+            const successMessage = document.getElementById('success-message');
+            
+            submitBtn.addEventListener('click', function() {
+                // 显示加载状态
+                submitBtn.innerHTML = '提交中...';
+                submitBtn.disabled = true;
+                
+                // 模拟提交过程
+                setTimeout(function() {
+                    applicationSummary.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    // 滚动到成功消息
+                    successMessage.scrollIntoView({ behavior: 'smooth' });
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

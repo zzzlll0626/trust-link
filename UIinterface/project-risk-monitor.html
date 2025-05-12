@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>风险监控 - 元宇宙商业街区 | Trust Link</title>
+    <style>
+        /* 基础样式沿用前面页面 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        /* 风险监控页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+
+        .breadcrumbs {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .breadcrumbs a {
+            color: #4361ee;
+            text-decoration: none;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .project-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .project-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header-title {
+            font-size: 28px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: normal;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .header-meta {
+            color: #666;
+        }
+
+        .alert-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 15px 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+
+        .alert-title {
+            color: #ef4444;
+            font-weight: 500;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-message {
+            color: #666;
+        }
+
+        .risk-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            padding: 0 0 60px;
+        }
+
+        .risk-dashboard {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .dashboard-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .risk-metrics {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .metric-title {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .value-danger {
+            color: #ef4444;
+        }
+
+        .value-warning {
+            color: #f59e0b;
+        }
+
+        .value-success {
+            color: #10b981;
+        }
+
+        .metric-chart {
+            height: 100px;
+            background: #fff;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .metric-chart img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .risk-timeline {
+            padding: 20px;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #eee;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4361ee;
+        }
+
+        .timeline-date {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            font-weight: 500;
+        }
+
+        .voting-panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .voting-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .voting-info {
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .progress-for {
+            background: #10b981;
+            width: 40%;
+        }
+
+        .progress-against {
+            background: #ef4444;
+            width: 60%;
+        }
+
+        .votes-count {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .vote-option {
+            text-align: center;
+        }
+
+        .vote-count {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .vote-for {
+            color: #10b981;
+        }
+
+        .vote-against {
+            color: #ef4444;
+        }
+
+        .vote-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .voting-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .vote-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-continue {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-continue:hover {
+            background: #059669;
+        }
+
+        .btn-terminate {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-terminate:hover {
+            background: #dc2626;
+        }
+
+        .voting-note {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .related-projects {
+            margin-top: 30px;
+        }
+
+        .related-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .related-list {
+            list-style: none;
+        }
+
+        .related-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .related-item:last-child {
+            border-bottom: none;
+        }
+
+        .related-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .related-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .related-info {
+            flex: 1;
+        }
+
+        .related-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .related-status {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a href="#">仪表盘</a> &gt; <a href="#">我的投资</a> &gt; <a href="#">元宇宙商业街区</a> &gt; 风险监控
+            </div>
+
+            <div class="project-header">
+                <div class="header-info">
+                    <h1 class="header-title">
+                        元宇宙商业街区
+                        <span class="risk-badge">风险预警</span>
+                    </h1>
+                    <div class="header-meta">
+                        您的投资: 15 ETH | 投资日期: 2025-02-18 | 项目状态: 亏损 42%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="alert-banner">
+            <div class="alert-title">
+                <span>⚠️</span> 项目风险预警
+            </div>
+            <div class="alert-message">
+                该项目亏损已超过 40%，触发投票机制。请在 2025-05-10 23:59 前参与投票，决定项目是否继续。
+            </div>
+        </div>
+
+        <div class="risk-container">
+            <div class="risk-dashboard">
+                <div class="dashboard-header">
+                    <h2 class="dashboard-title">风险监控面板</h2>
+                </div>
+
+                <div class="risk-metrics">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-title">项目亏损率</div>
+                            <div class="metric-value value-danger">42%</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-title">资金使用率</div>
+                            <div class="metric-value value-warning">78%</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-title">项目用户增长</div>
+                            <div class="metric-value value-danger">-12%</div>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <div class="metric-title">商铺出租率</div>
+                            <div class="metric-value value-warning">35%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="risk-timeline">
+                    <h3 class="timeline-title">项目风险时间线</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025-05-07</div>
+                            <div class="timeline-content">项目亏损率超过 40%，触发投票机制</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025-04-20</div>
+                            <div class="timeline-content">项目团队更新调整计划，预计 6 个月内实现盈利</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025-04-15</div>
+                            <div class="timeline-content">项目亏损率超过 35%，平台发出风险预警</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025-03-28</div>
+                            <div class="timeline-content">主要商户退出，商铺出租率下降至 40%</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2025-03-10</div>
+                            <div class="timeline-content">项目亏损率超过 25%，平台开始监控</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="voting-panel">
+                <h2 class="voting-title">项目投票</h2>
+                <div class="voting-info">
+                    <div class="info-item">
+                        <span class="info-label">投票截止日期</span>
+                        <span>2025-07-10 23:59</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">您的投票权重</span>
+                        <span>15 ETH (10%)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">投票机制</span>
+                        <span>拜占庭容错共识</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 15px;">当前投票结果</h3>
+                <div class="progress-bar">
+                    <div class="progress progress-for"></div>
+                </div>
+                <div class="votes-count">
+                    <div class="vote-option">
+                        <div class="vote-count vote-for">40%</div>
+                        <div class="vote-label">继续项目</div>
+                    </div>
+                    <div class="vote-option">
+                        <div class="vote-count vote-against">60%</div>
+                        <div class="vote-label">终止项目</div>
+                    </div>
+                </div>
+
+                <div class="voting-actions">
+                    <a href="voting.html" class="btn">参与项目投票</a>
+                </div>
+
+                <div class="voting-note">
+                    注：投票一旦提交无法更改，请谨慎决策。项目团队已提交新的调整方案，您可以在投票前查看。
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

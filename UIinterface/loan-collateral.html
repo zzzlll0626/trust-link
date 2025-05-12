@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借款申请 - 抵押设置 | Trust Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        /* 借款申请页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .page-description {
+            max-width: 800px;
+            color: #666;
+        }
+        
+        .application-container {
+            padding: 40px 0 80px;
+        }
+        
+        .application-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .application-steps::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 20%;
+        }
+        
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .step.active .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step.completed .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .step.active .step-label {
+            color: #4361ee;
+            font-weight: 500;
+        }
+        
+        .application-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-section {
+            margin-bottom: 40px;
+        }
+        
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-required {
+            color: #e53e3e;
+            margin-left: 5px;
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-hint {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        .form-file-upload {
+            display: block;
+            width: 100%;
+            padding: 40px 20px;
+            border: 2px dashed #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .form-file-upload:hover {
+            border-color: #4361ee;
+        }
+        
+        .upload-icon {
+            font-size: 36px;
+            color: #4361ee;
+            margin-bottom: 10px;
+        }
+        
+        .collateral-card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .collateral-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .collateral-title {
+            font-weight: 500;
+        }
+        
+        .collateral-type {
+            padding: 4px 10px;
+            background: rgba(67, 97, 238, 0.1);
+            color: #4361ee;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .collateral-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .collateral-detail {
+            text-align: center;
+        }
+        
+        .detail-value {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .collateral-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .collateral-option {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .collateral-option:hover {
+            border-color: #4361ee;
+            background: #f7f9ff;
+        }
+        
+        .collateral-option.selected {
+            border-color: #4361ee;
+            background: #f0f4ff;
+        }
+        
+        .collateral-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #4361ee;
+        }
+        
+        .collateral-title {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .ltv-slider {
+            margin: 30px 0;
+        }
+        
+        .ltv-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .ltv-value {
+            font-weight: 500;
+            color: #4361ee;
+        }
+        
+        .slider-container {
+            position: relative;
+            height: 40px;
+        }
+        
+        .slider-track {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+        }
+        
+        .slider-progress {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 6px;
+            background: #4361ee;
+            border-radius: 3px;
+        }
+        
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #4361ee;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider-markers {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        
+        .slider-marker {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .available-assets {
+            margin-top: 30px;
+        }
+        
+        .asset-list {
+            margin-top: 20px;
+        }
+        
+        .asset-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .asset-icon {
+            width: 50px;
+            height: 50px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .asset-info {
+            flex: 1;
+        }
+        
+        .asset-name {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .asset-details {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .asset-value {
+            font-weight: 500;
+            color: #4361ee;
+            margin-right: 20px;
+        }
+        
+        .asset-checkbox {
+            transform: scale(1.2);
+        }
+        
+        .wallet-connect {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .wallet-connect:hover {
+            background: #e0e7ff;
+        }
+        
+        .wallet-icon {
+            margin-right: 10px;
+            font-size: 24px;
+            color: #4361ee;
+        }
+        
+        .risk-info {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .risk-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .risk-list {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                   <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">借款申请</h1>
+            <p class="page-description">通过Trust Link平台为您的元宇宙项目获取融资，只需完成以下申请步骤，我们将对您的项目进行评估，并为您匹配合适的投资者。</p>
+        </div>
+    </section>
+    
+    <section class="application-container">
+        <div class="container">
+            <div class="application-steps">
+                <div class="step completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">项目信息</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">融资需求</div>
+                </div>
+                <div class="step active">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">抵押设置</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">风险评估</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">提交审核</div>
+                </div>
+            </div>
+            
+            <div class="application-form">
+                <div class="form-section">
+                    <h2 class="form-title">抵押方式选择</h2>
+                    <div class="form-group">
+                        <label class="form-label">抵押类型<span class="form-required">*</span></label>
+                        <div class="collateral-options">
+                            <div class="collateral-option selected" onclick="selectCollateralOption(this)">
+                                <div class="collateral-icon">💎</div>
+                                <div class="collateral-title">数字货币抵押</div>
+                            </div>
+                            <div class="collateral-option" onclick="selectCollateralOption(this)">
+                                <div class="collateral-icon">🖼️</div>
+                                <div class="collateral-title">NFT抵押</div>
+                            </div>
+                            <div class="collateral-option" onclick="selectCollateralOption(this)">
+                                <div class="collateral-icon">🏠</div>
+                                <div class="collateral-title">虚拟地产抵押</div>
+                            </div>
+                            <div class="collateral-option" onclick="selectCollateralOption(this)">
+                                <div class="collateral-icon">🔮</div>
+                                <div class="collateral-title">元宇宙资产抵押</div>
+                            </div>
+                            <div class="collateral-option" onclick="selectCollateralOption(this)">
+                                <div class="collateral-icon">📱</div>
+                                <div class="collateral-title">项目收益权抵押</div>
+                            </div>
+                            <div class="collateral-option" onclick="selectCollateralOption(this)">
+                                <div class="collateral-icon">🔄</div>
+                                <div class="collateral-title">混合抵押</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">抵押率设置</h2>
+                    <p style="margin-bottom: 15px; color: #666;">抵押率越高，您需要提供的抵押品价值越低，但风险也相应提高。请根据项目风险和自身情况合理选择。</p>
+                    
+                    <div class="ltv-slider">
+                        <div class="ltv-label">
+                            <span>抵押率：</span>
+                            <span class="ltv-value">60%</span>
+                        </div>
+                        <div class="slider-container">
+                            <div class="slider-track"></div>
+                            <div class="slider-progress" style="width: 60%;"></div>
+                            <div class="slider-handle" style="left: 60%;"></div>
+                        </div>
+                        <div class="slider-markers">
+                            <div class="slider-marker">40%</div>
+                            <div class="slider-marker">50%</div>
+                            <div class="slider-marker">60%</div>
+                            <div class="slider-marker">70%</div>
+                            <div class="slider-marker">80%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="collateral-card">
+                        <div class="collateral-header">
+                            <div class="collateral-title">抵押概览</div>
+                            <div class="collateral-type">数字货币抵押</div>
+                        </div>
+                        <div class="collateral-details">
+                            <div class="collateral-detail">
+                                <div class="detail-value">50 ETH</div>
+                                <div class="detail-label">借款金额</div>
+                            </div>
+                            <div class="collateral-detail">
+                                <div class="detail-value">60%</div>
+                                <div class="detail-label">抵押率</div>
+                            </div>
+                            <div class="collateral-detail">
+                                <div class="detail-value">30 ETH</div>
+                                <div class="detail-label">需缴抵押品</div>
+                            </div>
+                            <div class="collateral-detail">
+                                <div class="detail-value">70%</div>
+                                <div class="detail-label">清算阈值</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">抵押资产选择</h2>
+                    <p>选择您要用作抵押的资产。如果列表中没有您想要的资产，请连接钱包导入。</p>
+                    
+                    <div class="available-assets">
+                        <h3>已关联资产列表</h3>
+                        <div class="asset-list">
+                            <div class="asset-item">
+                                <div class="asset-icon">Ξ</div>
+                                <div class="asset-info">
+                                    <div class="asset-name">以太坊 (ETH)</div>
+                                    <div class="asset-details">钱包地址: 0x7FaD...3E4b</div>
+                                </div>
+                                <div class="asset-value">20 ETH</div>
+                                <input type="checkbox" class="asset-checkbox" checked>
+                            </div>
+                            
+                            <div class="asset-item">
+                                <div class="asset-icon">₿</div>
+                                <div class="asset-info">
+                                    <div class="asset-name">比特币 (BTC)</div>
+                                    <div class="asset-details">钱包地址: bc1q...8v2h</div>
+                                </div>
+                                <div class="asset-value">0.5 BTC</div>
+                                <input type="checkbox" class="asset-checkbox" checked>
+                            </div>
+                            
+                            <div class="asset-item">
+                                <div class="asset-icon">U</div>
+                                <div class="asset-info">
+                                    <div class="asset-name">USDT</div>
+                                    <div class="asset-details">钱包地址: 0x7FaD...3E4b</div>
+                                </div>
+                                <div class="asset-value">15,000 USDT</div>
+                                <input type="checkbox" class="asset-checkbox">
+                            </div>
+                        </div>
+                        
+                        <div class="wallet-connect">
+                            <div class="wallet-icon">🔗</div>
+                            <span>连接更多钱包</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">NFT抵押物上传（可选）</h2>
+                    <div class="form-group">
+                        <label class="form-label">上传NFT证明文件</label>
+                        <label class="form-file-upload">
+                            <div class="upload-icon">🖼️</div>
+                            <div>点击或拖拽文件至此处上传</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 10px;">支持JPG、PNG、PDF格式，文件大小不超过5MB</div>
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">NFT合约地址</label>
+                        <input type="text" class="form-input" placeholder="输入NFT合约地址">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Token ID</label>
+                        <input type="text" class="form-input" placeholder="输入Token ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">NFT描述</label>
+                        <textarea class="form-textarea" placeholder="描述NFT的相关信息，如创作背景、稀有度、市场价值等"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2 class="form-title">虚拟地产信息（可选）</h2>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">平台名称</label>
+                                <select class="form-select">
+                                    <option value="">请选择平台</option>
+                                    <option value="decentraland">Decentraland</option>
+                                    <option value="sandbox">The Sandbox</option>
+                                    <option value="cryptovoxels">Cryptovoxels</option>
+                                    <option value="somnium">Somnium Space</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">地块坐标</label>
+                                <input type="text" class="form-input" placeholder="输入地块坐标，例如：X: 12, Y: -45">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">地块大小</label>
+                        <select class="form-select">
+                            <option value="">请选择地块大小</option>
+                            <option value="1x1">1x1</option>
+                            <option value="2x2">2x2</option>
+                            <option value="3x3">3x3</option>
+                            <option value="custom">自定义</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">地块截图</label>
+                        <label class="form-file-upload">
+                            <div class="upload-icon">📸</div>
+                            <div>点击或拖拽文件至此处上传</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 10px;">支持JPG、PNG格式，文件大小不超过5MB</div>
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="risk-info">
+                    <h3 class="risk-title">抵押须知</h3>
+                    <ul class="risk-list">
+                        <li>抵押率过高可能导致清算风险增加，建议选择与项目风险相匹配的抵押率</li>
+                        <li>数字货币价格波动较大，如抵押品价值下跌至清算阈值以下，系统将自动触发清算</li>
+                        <li>NFT和虚拟地产等非同质化资产的评估价值由平台根据市场数据动态计算</li>
+                        <li>抵押期间，抵押资产将由智能合约锁定，直至借款全部归还</li>
+                        <li>如需变更或追加抵押品，可在借款期间通过平台操作，但需支付一定手续费</li>
+                    </ul>
+                </div>
+                
+                <div class="form-actions">
+                    <a href="loan-financing.html" class="btn btn-secondary">上一步</a>
+                    <a href="loan-risk-assessment.html" class="btn">下一步</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        function selectCollateralOption(element) {
+            const options = document.querySelectorAll('.collateral-option');
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+        
+        // 简单的滑块交互实现
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.querySelector('.slider-container');
+            const handle = document.querySelector('.slider-handle');
+            const progress = document.querySelector('.slider-progress');
+            const ltvValue = document.querySelector('.ltv-value');
+            
+            let isDragging = false;
+            
+            function updateSlider(clientX) {
+                const rect = slider.getBoundingClientRect();
+                let position = (clientX - rect.left) / rect.width;
+                position = Math.max(0, Math.min(1, position));
+                
+                // 将值限制在40%到80%之间
+                const ltvPercentage = Math.round(40 + position * 40);
+                
+                handle.style.left = ltvPercentage + '%';
+                progress.style.width = ltvPercentage + '%';
+                ltvValue.textContent = ltvPercentage + '%';
+                
+                // 更新抵押概览
+                const collateralNeeded = document.querySelector('.collateral-details .collateral-detail:nth-child(3) .detail-value');
+                const borrowAmount = 50; // ETH
+                const collateralAmount = Math.round((borrowAmount * 100 / ltvPercentage) * 100) / 100;
+                collateralNeeded.textContent = collateralAmount + ' ETH';
+            }
+            
+            slider.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                updateSlider(e.clientX);
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (isDragging) {
+                    updateSlider(e.clientX);
+                }
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+            });
+            
+            // 点击滑轨直接跳转
+            slider.addEventListener('click', function(e) {
+                updateSlider(e.clientX);
+            });
+        });
+    </script>
+</body>
+</html>

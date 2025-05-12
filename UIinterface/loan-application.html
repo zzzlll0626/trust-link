@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>借款申请 - Trust Link</title>
+    <style>
+        /* 基础样式沿用前面页面 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #3a0ca3;
+        }
+
+        /* 借款申请页特有样式 */
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+        }
+
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .page-description {
+            max-width: 800px;
+            color: #666;
+        }
+
+        .application-container {
+            padding: 40px 0 80px;
+        }
+
+        .application-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .application-steps::before {
+            content: '';
+            position: absolute;
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 20%;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        .step.active .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            background: #4361ee;
+            border-color: #4361ee;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #4361ee;
+            font-weight: 500;
+        }
+
+        .application-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-required {
+            color: #e53e3e;
+            margin-left: 5px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .form-file-upload {
+            display: block;
+            width: 100%;
+            padding: 40px 20px;
+            border: 2px dashed #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .form-file-upload:hover {
+            border-color: #4361ee;
+        }
+
+        .upload-icon {
+            font-size: 36px;
+            color: #4361ee;
+            margin-bottom: 10px;
+        }
+
+        .collateral-card {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .collateral-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .collateral-title {
+            font-weight: 500;
+        }
+
+        .collateral-type {
+            padding: 4px 10px;
+            background: rgba(67, 97, 238, 0.1);
+            color: #4361ee;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .collateral-details {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .collateral-detail {
+            text-align: center;
+        }
+
+        .detail-value {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .risk-info {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .risk-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .risk-list {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo" style="height: 60px;">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="loan-application.html">借款申请</a></li>
+                    <li><a href="about.html">关于我们</a></li>
+                    <li><a href="dashboard.html" class="btn">我的账户</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">借款申请</h1>
+            <p class="page-description">通过Trust Link平台为您的元宇宙项目获取融资，只需完成以下申请步骤，我们将对您的项目进行评估，并为您匹配合适的投资者。</p>
+        </div>
+    </section>
+
+    <section class="application-container">
+        <div class="container">
+            <div class="application-steps">
+                <div class="step active">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">项目信息</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">融资需求</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">抵押设置</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">风险评估</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">提交审核</div>
+                </div>
+            </div>
+
+            <div class="application-form">
+                <div class="form-section">
+                    <h2 class="form-title">项目基本信息</h2>
+                    <div class="form-group">
+                        <label class="form-label">项目名称<span class="form-required">*</span></label>
+                        <input type="text" class="form-input" placeholder="输入项目名称">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">项目类型<span class="form-required">*</span></label>
+                                <select class="form-select">
+                                    <option value="">请选择项目类型</option>
+                                    <option value="virtual-office">虚拟办公</option>
+                                    <option value="estate">虚拟地产</option>
+                                    <option value="nft">NFT艺术</option>
+                                    <option value="game">元宇宙游戏</option>
+                                    <option value="retail">虚拟零售</option>
+                                    <option value="education">虚拟教育</option>
+                                    <option value="social">社交平台</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">发展阶段<span class="form-required">*</span></label>
+                                <select class="form-select">
+                                    <option value="">请选择项目阶段</option>
+                                    <option value="idea">构思阶段</option>
+                                    <option value="mvp">最小可行产品</option>
+                                    <option value="beta">Beta测试版</option>
+                                    <option value="live">已上线运营</option>
+                                    <option value="growth">成长扩张期</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">项目简介<span class="form-required">*</span></label>
+                        <textarea class="form-textarea" placeholder="简要描述您的项目内容、目标和特色（500字以内）"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">项目网站</label>
+                        <input type="text" class="form-input" placeholder="项目网站URL（如有）">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="form-title">团队信息</h2>
+                    <div class="form-group">
+                        <label class="form-label">团队名称<span class="form-required">*</span></label>
+                        <input type="text" class="form-input" placeholder="输入团队或公司名称">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">团队规模<span class="form-required">*</span></label>
+                                <select class="form-select">
+                                    <option value="">请选择团队规模</option>
+                                    <option value="1-5">1-5人</option>
+                                    <option value="6-15">6-15人</option>
+                                    <option value="16-30">16-30人</option>
+                                    <option value="31-50">31-50人</option>
+                                    <option value="50+">50人以上</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label">成立时间<span class="form-required">*</span></label>
+                                <input type="date" class="form-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">团队核心成员<span class="form-required">*</span></label>
+                        <textarea class="form-textarea" placeholder="列出核心团队成员的姓名、职位和简要背景（如教育、工作经历等）"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">团队往期项目</label>
+                        <textarea class="form-textarea" placeholder="描述团队以往开发的项目及成果（如有）"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="form-title">项目白皮书</h2>
+                    <div class="form-group">
+                        <label class="form-label">上传项目白皮书<span class="form-required">*</span></label>
+                        <label class="form-file-upload">
+                            <div class="upload-icon">📄</div>
+                            <div>点击或拖拽文件至此处上传</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 10px;">支持PDF、DOC、DOCX格式，文件大小不超过10MB
+                            </div>
+                            <input type="file" style="display: none;">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">项目演示视频/截图</label>
+                        <label class="form-file-upload">
+                            <div class="upload-icon">🖼️</div>
+                            <div>点击或拖拽文件至此处上传</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 10px;">
+                                支持JPG、PNG、MP4格式，最多5个文件，单个文件不超过20MB</div>
+                            <input type="file" multiple style="display: none;">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="risk-info">
+                    <h3 class="risk-title">提交须知</h3>
+                    <ul class="risk-list">
+                        <li>所有提交信息将经过平台审核，请确保信息真实准确</li>
+                        <li>白皮书内容应包括项目详情、市场分析、商业模式、发展路线等</li>
+                        <li>项目信息提交后将进入平台评估流程，评估周期为3-5个工作日</li>
+                        <li>通过初步评估后，我们将安排线上会议进一步了解项目情况</li>
+                        <li>最终借款额度、期限和利率将基于项目评估结果确定</li>
+                    </ul>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-secondary">保存草稿</button>
+                    <a href="loan-financing.html" class="btn">下一步</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>演示面板 - Trust Link</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Trust Link</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="projects.html">项目浏览</a></li>
+                    <li><a href="apply.html">借款申请</a></li>
+                    <li><a href="demo.html" class="active">演示面板</a></li>
+                    <li><button id="connect-wallet" class="btn">连接钱包</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">演示控制面板</h1>
+            <p>使用此面板初始化演示数据和测试平台功能</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">账户信息</h2>
+                </div>
+                <div id="account-info" style="display: none;">
+                    <p>地址: <span id="account-address"></span></p>
+                    <p>ETH余额: <span id="account-balance"></span> ETH</p>
+                </div>
+                <div id="connect-prompt" style="text-align: center; padding: 20px;">
+                    <p>请先连接您的钱包</p>
+                    <button id="connect-btn" class="btn">连接钱包</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">数据初始化</h2>
+                </div>
+                <p>创建演示项目、初始化信用评分和资金池</p>
+                <button id="init-demo-btn" class="btn" disabled>初始化演示数据</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">项目风险模拟</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="project-select">选择项目</label>
+                    <select id="project-select" class="form-control">
+                        <option value="">加载中...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="loss-percentage">亏损百分比</label>
+                    <input type="range" id="loss-percentage" class="form-control" min="0" max="100" value="0">
+                    <div id="loss-display" style="text-align: center;">0%</div>
+                </div>
+                <button id="update-loss-btn" class="btn" disabled>更新亏损率</button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">投票机制模拟</h2>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="vote-project-select">选择项目</label>
+                    <select id="vote-project-select" class="form-control">
+                        <option value="">加载中...</option>
+                    </select>
+                </div>
+                <button id="start-vote-btn" class="btn" disabled>启动投票 (3天)</button>
+                
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button id="vote-continue-btn" class="btn" style="flex: 1; background-color: #28a745;" disabled>投票继续项目</button>
+                    <button id="vote-terminate-btn" class="btn" style="flex: 1; background-color: #dc3545;" disabled>投票终止项目</button>
+                </div>
+                
+                <div id="vote-results" style="margin-top: 20px; display: none;">
+                    <h3>投票结果</h3>
+                    <div class="progress-bar" style="margin-top: 10px;">
+                        <div id="votes-for-progress" class="progress" style="width: 0%; background-color: #28a745;"></div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                        <span>赞成: <span id="votes-for">0</span></span>
+                        <span>反对: <span id="votes-against">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Trust Link 借贷平台. 所有权利保留。</p>
+        </div>
+    </footer>
+
+    <script type="module" src="js/app.js"></script>
+    <script type="module">
+        import { connectWallet, updateAccountInfo, getContracts } from './js/app.js';
+        import { runDemoInitialization } from './js/demo-data.js';
+        import { startProjectVote, castVote, getVotingResults } from './js/voting.js';
+        
+        // 加载项目到下拉列表
+        async function loadProjectsToSelect() {
+            try {
+                const contracts = await getContracts();
+                if (!contracts) return;
+                
+                const projectCount = await contracts.lending.projectCount();
+                
+                const projectSelect = document.getElementById('project-select');
+                const voteProjectSelect = document.getElementById('vote-project-select');
+                
+                projectSelect.innerHTML = '';
+                voteProjectSelect.innerHTML = '';
+                
+                if (projectCount == 0) {
+                    projectSelect.innerHTML = '<option value="">无可用项目</option>';
+                    voteProjectSelect.innerHTML = '<option value="">无可用项目</option>';
+                    return;
+                }
+                
+                for (let i = 0; i < projectCount; i++) {
+                    const projectInfo = await contracts.lending.getProjectInfo(i);
+                    
+                    const option1 = document.createElement('option');
+                    option1.value = i;
+                    option1.textContent = projectInfo.title;
+                    projectSelect.appendChild(option1);
+                    
+                    const option2 = document.createElement('option');
+                    option2.value = i;
+                    option2.textContent = projectInfo.title;
+                    voteProjectSelect.appendChild(option2);
+                }
+                
+                // 启用按钮
+                document.getElementById('update-loss-btn').disabled = false;
+                document.getElementById('start-vote-btn').disabled = false;
+                document.getElementById('vote-continue-btn').disabled = false;
+                document.getElementById('vote-terminate-btn').disabled = false;
+            } catch (error) {
+                console.error("加载项目失败:", error);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 连接钱包按钮
+            document.getElementById('connect-btn').addEventListener('click', async () => {
+                const account = await connectWallet();
+                if (account) {
+                    await updateAccountInfo(account);
+                    document.getElementById('account-info').style.display = 'block';
+                    document.getElementById('connect-prompt').style.display = 'none';
+                    document.getElementById('init-demo-btn').disabled = false;
+                    
+                    // 加载项目列表
+                    await loadProjectsToSelect();
+                }
+            });
+            
+            // 初始化演示数据
+            document.getElementById('init-demo-btn').addEventListener('click', async () => {
+                const button = document.getElementById('init-demo-btn');
+                button.disabled = true;
+                button.textContent = '初始化中...';
+                
+                const success = await runDemoInitialization();
+                
+                button.textContent = success ? '初始化完成' : '初始化失败';
+                
+                // 重新加载项目列表
+                await loadProjectsToSelect();
+            });
+            
+            // 亏损率滑块
+            const lossSlider = document.getElementById('loss-percentage');
+            const lossDisplay = document.getElementById('loss-display');
+            
+            lossSlider.addEventListener('input', () => {
+                lossDisplay.textContent = lossSlider.value + '%';
+            });
+            
+            // 更新亏损率按钮
+            document.getElementById('update-loss-btn').addEventListener('click', async () => {
+                const projectSelect = document.getElementById('project-select');
+                const projectId = projectSelect.value;
+                
+                if (!projectId) {
+                    alert('请选择一个项目');
+                    return;
+                }
+                
+                const lossPercentage = parseInt(lossSlider.value);
+                const button = document.getElementById('update-loss-btn');
+                
+                try {
+                    button.disabled = true;
+                    button.textContent = '更新中...';
+                    
+                    const contracts = await getContracts();
+                    const tx = await contracts.lending.updateLossPercentage(projectId, lossPercentage);
+                    await tx.wait();
+                    
+                    alert(`项目亏损率已更新为 ${lossPercentage}%`);
+                    
+                    // 如果亏损超过40%，提示启动投票
+                    if (lossPercentage >= 40) {
+                        alert('项目亏损率已超过40%，可以启动投票机制');
+                        document.getElementById('vote-project-select').value = projectId;
+                    }
+                } catch (error) {
+                    console.error("更新亏损率失败:", error);
+                    alert("更新失败: " + error.message);
+                } finally {
+                    button.disabled = false;
+                    button.textContent = '更新亏损率';
+                }
+            });
+            
+            // 启动投票按钮
+            document.getElementById('start-vote-btn').addEventListener('click', async () => {
+                const projectSelect = document.getElementById('vote-project-select');
+                const projectId = projectSelect.value;
+                
+                if (!projectId) {
+                    alert('请选择一个项目');
+                    return;
+                }
+                
+                const button = document.getElementById('start-vote-btn');
+                
+                try {
+                    button.disabled = true;
+                    button.textContent = '启动中...';
+                    
+                    // 启动投票 (3天)
+                    const success = await startProjectVote(projectId, 3);
+                    
+                    if (success) {
+                        alert(`已为项目 #${projectId} 启动投票，持续3天`);
+                        
+                        // 显示投票结果区域
+                        document.getElementById('vote-results').style.display = 'block';
+                        
+                        // 更新投票结果显示
+                        const results = await getVotingResults(projectId);
+                        if (results) {
+                            updateVoteResults(results);
+                        }
+                    }
+                } catch (error) {
+                    console.error("启动投票失败:", error);
+                    alert("启动失败: " + error.message);
+                } finally {
+                    button.disabled = false;
+                    button.textContent = '启动投票 (3天)';
+                }
+            });
+            
+            // 投票继续项目按钮
+            document.getElementById('vote-continue-btn').addEventListener('click', async () => {
+                const projectSelect = document.getElementById('vote-project-select');
+                const projectId = projectSelect.value;
+                
+                if (!projectId) {
+                    alert('请选择一个项目');
+                    return;
+                }
+                
+                const button = document.getElementById('vote-continue-btn');
+                
+                try {
+                    button.disabled = true;
+                    button.textContent = '投票中...';
+                    
+                    // 投票继续项目
+                    const results = await castVote(projectId, true);
+                    
+                    if (results) {
+                        alert(`您已投票继续项目`);
+                        
+                        // 显示投票结果区域
+                        document.getElementById('vote-results').style.display = 'block';
+                        
+                        // 更新投票结果显示
+                        updateVoteResults(results);
+                    }
+                } catch (error) {
+                    console.error("投票失败:", error);
+                    alert("投票失败: " + error.message);
+                } finally {
+                    button.disabled = false;
+                    button.textContent = '投票继续项目';
+                }
+            });
+            
+            // 投票终止项目按钮
+            document.getElementById('vote-terminate-btn').addEventListener('click', async () => {
+                const projectSelect = document.getElementById('vote-project-select');
+                const projectId = projectSelect.value;
+                
+                if (!projectId) {
+                    alert('请选择一个项目');
+                    return;
+                }
+                
+                const button = document.getElementById('vote-terminate-btn');
+                
+                try {
+                    button.disabled = true;
+                    button.textContent = '投票中...';
+                    
+                    // 投票终止项目
+                    const results = await castVote(projectId, false);
+                    
+                    if (results) {
+                        alert(`您已投票终止项目`);
+                        
+                        // 显示投票结果区域
+                        document.getElementById('vote-results').style.display = 'block';
+                        
+                        // 更新投票结果显示
+                        updateVoteResults(results);
+                    }
+                } catch (error) {
+                    console.error("投票失败:", error);
+                    alert("投票失败: " + error.message);
+                } finally {
+                    button.disabled = false;
+                    button.textContent = '投票终止项目';
+                }
+            });
+            
+            // 更新投票结果显示
+            function updateVoteResults(results) {
+                document.getElementById('votes-for').textContent = results.votesFor;
+                document.getElementById('votes-against').textContent = results.votesAgainst;
+                
+                const totalVotes = results.votesFor + results.votesAgainst;
+                const forPercentage = totalVotes > 0 ? (results.votesFor / totalVotes) * 100 : 0;
+                
+                document.getElementById('votes-for-progress').style.width = `${forPercentage}%`;
+            }
+            
+            // 尝试自动连接钱包
+            try {
+                if (window.ethereum && window.ethereum.selectedAddress) {
+                    const account = window.ethereum.selectedAddress;
+                    if (account) {
+                        await updateAccountInfo(account);
+                        document.getElementById('account-info').style.display = 'block';
+                        document.getElementById('connect-prompt').style.display = 'none';
+                        document.getElementById('init-demo-btn').disabled = false;
+                        
+                        // 加载项目列表
+                        await loadProjectsToSelect();
+                    }
+                }
+            } catch (error) {
+                console.error("自动连接钱包失败:", error);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>连接钱包 - Trust Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: #f9fafb;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #3a0ca3, #4361ee);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4361ee;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: #3a0ca3;
+        }
+        
+        .page-header {
+            padding: 40px 0;
+            background: #e9ecef;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .page-description {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+        }
+        
+        .login-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+        
+        .login-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .wallet-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .wallet-option:hover {
+            border-color: #4361ee;
+            background: #f7f9ff;
+        }
+        
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wallet-name {
+            font-weight: 500;
+        }
+        
+        .wallet-description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+        
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            background-color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ddd;
+        }
+        
+        .progress-step.active {
+            border-color: #4361ee;
+            background-color: #4361ee;
+            color: white;
+        }
+        
+        .progress-step.completed {
+            border-color: #38b2ac;
+            background-color: #38b2ac;
+            color: white;
+        }
+        
+        .progress-step-label {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .active .progress-step-label,
+        .completed .progress-step-label {
+            color: #4361ee;
+            font-weight: bold;
+        }
+        
+        .connection-process {
+            text-align: center;
+            margin: 40px 0;
+            display: none;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            border: 5px solid rgba(74, 85, 238, 0.2);
+            border-radius: 50%;
+            border-top-color: #4361ee;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .connection-steps {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .connection-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .connection-step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .step-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #ddd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-indicator.completed {
+            background-color: #38b2ac;
+        }
+        
+        .step-indicator.active {
+            background-color: #4361ee;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .success-message {
+            text-align: center;
+            margin: 40px 0;
+            display: none;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background-color: #38b2ac;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+        }
+        
+        .wallet-details {
+            margin: 20px 0;
+            background-color: #f0fdf4;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: left;
+            border: 1px solid #d1fae5;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #d1fae5;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            color: #666;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+            font-family: monospace;
+        }
+        
+        .btn-large {
+            padding: 14px 28px;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        .metamask-fox {
+                height: 30px;
+                margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <img src="logo.svg" alt="Trust Link Logo">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#">首页</a></li>
+                    <li><a href="#">项目浏览</a></li>
+                    <li><a href="#">借款申请</a></li>
+                    <li><a href="#">关于我们</a></li>
+                    <li><a href="#" class="btn">连接钱包</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">连接您的钱包</h1>
+            <p class="page-description">通过以下数字钱包方式连接 Trust Link 平台，开始您的元宇宙投资之旅</p>
+        </div>
+    </section>
+    
+    <div class="container">
+        <div class="progress-steps">
+            <div class="progress-step active">
+                1
+                <span class="progress-step-label">连接钱包</span>
+            </div>
+            <div class="progress-step">
+                2
+                <span class="progress-step-label">身份验证</span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="wallet-selection" class="login-container">
+        <h2 class="login-title">选择连接方式</h2>
+        
+        <div class="wallet-option" id="metamask-option">
+                    <div class="metamask-fox">
+                        <svg width="100%" height="100%" viewBox="0 0 35 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32.9582 1L19.8241 10.7183L22.2665 5.09902L32.9582 1Z" fill="#E17726" stroke="#E17726" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2.65672 1L15.6446 10.8331L13.3504 5.09902L2.65672 1Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M28.2291 23.5283L24.7426 28.8138L32.2462 30.8211L34.382 23.6431L28.2291 23.5283Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1.2549 23.6431L3.37131 30.8211L10.8749 28.8138L7.3884 23.5283L1.2549 23.6431Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.4704 14.5149L8.39478 17.6507L15.7978 17.9947L15.5543 10.0498L10.4704 14.5149Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M25.1499 14.5149L19.9613 9.93488L19.8224 17.9947L27.2255 17.6507L25.1499 14.5149Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.8748 28.8137L15.3096 26.6399L11.4757 23.6873L10.8748 28.8137Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.3098 26.6399L24.7446 28.8137L24.1436 23.6873L20.3098 26.6399Z" fill="#E27625" stroke="#E27625" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M24.7446 28.8139L20.3098 26.6401L20.6581 29.5348L20.6191 30.7063L24.7446 28.8139Z" fill="#D5BFB2" stroke="#D5BFB2" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.8748 28.8139L15.0003 30.7063L14.9807 29.5348L15.3096 26.6401L10.8748 28.8139Z" fill="#D5BFB2" stroke="#D5BFB2" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.1002 21.7865L11.4166 20.6918L14.0249 19.488L15.1002 21.7865Z" fill="#233447" stroke="#233447" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.5192 21.7865L21.5945 19.488L24.2223 20.6918L20.5192 21.7865Z" fill="#233447" stroke="#233447" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.8748 28.8138L11.4952 23.5283L7.3884 23.6431L10.8748 28.8138Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M24.1242 23.5283L24.7446 28.8138L28.2311 23.6431L24.1242 23.5283Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M27.2255 17.6507L19.8224 17.9947L20.5192 21.7866L21.5945 19.4881L24.2223 20.6919L27.2255 17.6507Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M11.4166 20.6919L14.0444 19.4881L15.1002 21.7866L15.7971 17.9947L8.39395 17.6507L11.4166 20.6919Z" fill="#CC6228" stroke="#CC6228" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.39404 17.6507L11.4756 23.6873L11.4166 20.6919L8.39404 17.6507Z" fill="#E27525" stroke="#E27525" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M24.2224 20.6919L24.1439 23.6873L27.2255 17.6507L24.2224 20.6919Z" fill="#E27525" stroke="#E27525" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.7979 17.9947L15.1011 21.7866L15.9762 26.2517L16.1347 20.3479L15.7979 17.9947Z" fill="#E27525" stroke="#E27525" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.8233 17.9947L19.4865 20.3284L19.6254 26.2517L20.5201 21.7866L19.8233 17.9947Z" fill="#E27525" stroke="#E27525" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.5192 21.7864L19.6245 26.2515L20.3098 26.6399L24.1437 23.6872L24.2221 20.6918L20.5192 21.7864Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M11.4166 20.6918L11.4756 23.6872L15.3095 26.6399L15.9948 26.2515L15.1001 21.7864L11.4166 20.6918Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.619 30.7063L20.658 29.5348L20.3292 29.2482H15.2902L14.9808 29.5348L15.0003 30.7063L10.8748 28.8139L12.3162 30.0044L15.2511 32.0117H20.3487L23.3032 30.0044L24.7446 28.8139L20.619 30.7063Z" fill="#C0AC9D" stroke="#C0AC9D" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M20.3098 26.6398L19.6245 26.2515H15.9948L15.3095 26.6398L14.9807 29.5346L15.2901 29.248H20.3291L20.6579 29.5346L20.3098 26.6398Z" fill="#161616" stroke="#161616" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M33.7517 11.3532L34.8661 6.01127L32.9578 1L20.3098 10.4121L25.1498 14.5149L32.0827 16.4649L33.5827 14.7011L32.9033 14.2169L33.9394 13.2477L33.1035 12.6287L34.1396 11.8371L33.7517 11.3532Z" fill="#763E1A" stroke="#763E1A" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M1.7533 6.01127L2.8677 11.3532L2.45936 11.8371L3.49553 12.6287L2.65957 13.2477L3.69573 14.2169L3.01636 14.7011L4.5164 16.4649L11.4492 14.5149L16.2893 10.4121L3.64129 1L1.7533 6.01127Z" fill="#763E1A" stroke="#763E1A" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M32.0828 16.4648L25.1499 14.5148L27.2255 17.6507L24.1438 23.6873L28.2312 23.643H34.3841L32.0828 16.4648Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M11.4494 14.5148L4.51655 16.4648L2.23486 23.643H8.3878L12.4751 23.6873L9.3935 17.6507L11.4494 14.5148Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M19.8232 17.9947L20.3097 10.4122L22.2671 5.09924H13.3523L15.2901 10.4122L15.7962 17.9947L15.9743 20.3674L15.9939 26.2517H19.6236L19.6432 20.3674L19.8232 17.9947Z" fill="#F5841F" stroke="#F5841F" stroke-width="0.25" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="wallet-info">
+                        <div class="wallet-name">MetaMask</div>
+                        <div class="wallet-description">连接您的 MetaMask 钱包</div>
+                    </div>
+                </div>
+            </div>
+    
+    <div id="connection-process" class="connection-process container">
+        <div class="login-container">
+            <div class="spinner"></div>
+            <h2 class="login-title">正在连接钱包</h2>
+            <p>请在钱包弹窗中确认连接请求...</p>
+            
+            <div class="connection-steps">
+                <div class="connection-step">
+                    <div class="step-indicator completed">✓</div>
+                    <div class="step-content">
+                        <div class="step-title">初始化连接</div>
+                        <div class="step-description">启动钱包连接请求</div>
+                    </div>
+                </div>
+                
+                <div class="connection-step">
+                    <div class="step-indicator active">2</div>
+                    <div class="step-content">
+                        <div class="step-title">等待授权</div>
+                        <div class="step-description">等待您在钱包中确认连接请求</div>
+                    </div>
+                </div>
+                
+                <div class="connection-step">
+                    <div class="step-indicator">3</div>
+                    <div class="step-content">
+                        <div class="step-title">生成DID标识符</div>
+                        <div class="step-description">使用钱包密钥对创建您的DID</div>
+                    </div>
+                </div>
+                
+                <div class="connection-step">
+                    <div class="step-indicator">4</div>
+                    <div class="step-content">
+                        <div class="step-title">完成连接</div>
+                        <div class="step-description">建立安全会话</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="success-message" class="success-message container">
+        <div class="login-container">
+            <div class="success-icon">✓</div>
+            
+            <h2 class="login-title">钱包连接成功！</h2>
+            <p>您的钱包已成功连接到Trust Link平台。我们已经生成了您的DID标识符。</p>
+            
+            <div class="wallet-details">
+                <div class="detail-row">
+                    <div class="detail-label">钱包类型</div>
+                    <div class="detail-value">MetaMask</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">钱包地址</div>
+                    <div class="detail-value">0x7a9d...e5f3</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">DID标识符</div>
+                    <div class="detail-value">did:trustlink:0x7a9d...e5f3</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">网络</div>
+                    <div class="detail-value">以太坊主网</div>
+                </div>
+            </div>
+            
+            <p>接下来，我们需要将您的DID与您的身份信息进行绑定。</p>
+            <a href="identity-verification.html" class="btn btn-large">继续身份验证</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const walletSelection = document.getElementById('wallet-selection');
+            const connectionProcess = document.getElementById('connection-process');
+            const successMessage = document.getElementById('success-message');
+            const metamaskOption = document.getElementById('metamask-option');
+            
+            // 模拟连接钱包过程
+            metamaskOption.addEventListener('click', function() {
+                // 隐藏钱包选择页面，显示连接过程
+                walletSelection.style.display = 'none';
+                connectionProcess.style.display = 'block';
+                
+                // 模拟连接过程
+                simulateConnection();
+            });
+            
+            function simulateConnection() {
+                const steps = document.querySelectorAll('.connection-step .step-indicator');
+                
+                // 模拟第二步完成（等待授权）
+                setTimeout(() => {
+                    steps[1].classList.remove('active');
+                    steps[1].classList.add('completed');
+                    steps[1].innerHTML = '✓';
+                    steps[2].classList.add('active');
+                }, 2000);
+                
+                // 模拟第三步完成（生成DID标识符）
+                setTimeout(() => {
+                    steps[2].classList.remove('active');
+                    steps[2].classList.add('completed');
+                    steps[2].innerHTML = '✓';
+                    steps[3].classList.add('active');
+                }, 4000);
+                
+                // 模拟第四步完成（完成连接），显示成功信息
+                setTimeout(() => {
+                    steps[3].classList.remove('active');
+                    steps[3].classList.add('completed');
+                    steps[3].innerHTML = '✓';
+                    
+                    // 更新进度指示器
+                    const progressSteps = document.querySelectorAll('.progress-steps .progress-step');
+                    progressSteps[0].classList.remove('active');
+                    progressSteps[0].classList.add('completed');
+                    progressSteps[0].innerHTML = '✓';
+                    progressSteps[1].classList.add('active');
+                    
+                    // 隐藏连接过程，显示成功信息
+                    connectionProcess.style.display = 'none';
+                    successMessage.style.display = 'block';
+                }, 6000);
+            }
+        });
+    </script>
+</body>
+</html>

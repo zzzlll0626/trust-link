@@ -1,0 +1,130 @@
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="800" height="400" fill="#f9fafb" rx="4" ry="4"/>
+  
+  <!-- 图表网格 -->
+  <g stroke="#e5e7eb" stroke-width="1">
+    <!-- 横向网格线 -->
+    <line x1="80" y1="50" x2="750" y2="50" />
+    <line x1="80" y1="100" x2="750" y2="100" />
+    <line x1="80" y1="150" x2="750" y2="150" />
+    <line x1="80" y1="200" x2="750" y2="200" />
+    <line x1="80" y1="250" x2="750" y2="250" />
+    <line x1="80" y1="300" x2="750" y2="300" />
+    <line x1="80" y1="350" x2="750" y2="350" />
+    
+    <!-- 纵向网格线 -->
+    <line x1="80" y1="50" x2="80" y2="350" />
+    <line x1="155" y1="50" x2="155" y2="350" />
+    <line x1="230" y1="50" x2="230" y2="350" />
+    <line x1="305" y1="50" x2="305" y2="350" />
+    <line x1="380" y1="50" x2="380" y2="350" />
+    <line x1="455" y1="50" x2="455" y2="350" />
+    <line x1="530" y1="50" x2="530" y2="350" />
+    <line x1="605" y1="50" x2="605" y2="350" />
+    <line x1="680" y1="50" x2="680" y2="350" />
+    <line x1="750" y1="50" x2="750" y2="350" />
+  </g>
+  
+  <!-- 图表数据 - 总体风险指数 -->
+  <path d="M80 280 L155 250 L230 220 L305 240 L380 200 L455 180 L530 190 L605 150 L680 165 L750 140" 
+        fill="none" stroke="#4361ee" stroke-width="3" stroke-linejoin="round" />
+  <path d="M80 280 L155 250 L230 220 L305 240 L380 200 L455 180 L530 190 L605 150 L680 165 L750 140 L750 350 L80 350 Z" 
+        fill="url(#gradient1)" fill-opacity="0.2" />
+  
+  <!-- 图表数据 - 市场波动指数 -->
+  <path d="M80 260 L155 280 L230 240 L305 260 L380 230 L455 260 L530 240 L605 200 L680 220 L750 180" 
+        fill="none" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round" stroke-dasharray="5,5" />
+        
+  <!-- 图表数据 - 流动性风险 -->
+  <path d="M80 220 L155 230 L230 200 L305 210 L380 180 L455 190 L530 170 L605 175 L680 140 L750 120" 
+        fill="none" stroke="#ef4444" stroke-width="3" stroke-linejoin="round" />
+  <path d="M80 220 L155 230 L230 200 L305 210 L380 180 L455 190 L530 170 L605 175 L680 140 L750 120 L750 350 L80 350 Z" 
+        fill="url(#gradient2)" fill-opacity="0.1" />
+        
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4361ee" />
+      <stop offset="100%" stop-color="#4361ee" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 数据点 -->
+  <g>
+    <!-- 总体风险指数 -->
+    <circle cx="80" cy="280" r="4" fill="#4361ee" />
+    <circle cx="155" cy="250" r="4" fill="#4361ee" />
+    <circle cx="230" cy="220" r="4" fill="#4361ee" />
+    <circle cx="305" cy="240" r="4" fill="#4361ee" />
+    <circle cx="380" cy="200" r="4" fill="#4361ee" />
+    <circle cx="455" cy="180" r="4" fill="#4361ee" />
+    <circle cx="530" cy="190" r="4" fill="#4361ee" />
+    <circle cx="605" cy="150" r="4" fill="#4361ee" />
+    <circle cx="680" cy="165" r="4" fill="#4361ee" />
+    <circle cx="750" cy="140" r="4" fill="#4361ee" />
+    
+    <!-- 市场波动指数 -->
+    <circle cx="80" cy="260" r="4" fill="#f59e0b" />
+    <circle cx="155" cy="280" r="4" fill="#f59e0b" />
+    <circle cx="230" cy="240" r="4" fill="#f59e0b" />
+    <circle cx="305" cy="260" r="4" fill="#f59e0b" />
+    <circle cx="380" cy="230" r="4" fill="#f59e0b" />
+    <circle cx="455" cy="260" r="4" fill="#f59e0b" />
+    <circle cx="530" cy="240" r="4" fill="#f59e0b" />
+    <circle cx="605" cy="200" r="4" fill="#f59e0b" />
+    <circle cx="680" cy="220" r="4" fill="#f59e0b" />
+    <circle cx="750" cy="180" r="4" fill="#f59e0b" />
+    
+    <!-- 流动性风险 -->
+    <circle cx="80" cy="220" r="4" fill="#ef4444" />
+    <circle cx="155" cy="230" r="4" fill="#ef4444" />
+    <circle cx="230" cy="200" r="4" fill="#ef4444" />
+    <circle cx="305" cy="210" r="4" fill="#ef4444" />
+    <circle cx="380" cy="180" r="4" fill="#ef4444" />
+    <circle cx="455" cy="190" r="4" fill="#ef4444" />
+    <circle cx="530" cy="170" r="4" fill="#ef4444" />
+    <circle cx="605" cy="175" r="4" fill="#ef4444" />
+    <circle cx="680" cy="140" r="4" fill="#ef4444" />
+    <circle cx="750" cy="120" r="4" fill="#ef4444" />
+  </g>
+  
+  <!-- 坐标轴 -->
+  <line x1="80" y1="350" x2="750" y2="350" stroke="#64748b" stroke-width="2" />
+  <line x1="80" y1="50" x2="80" y2="350" stroke="#64748b" stroke-width="2" />
+  
+  <!-- X轴标签 -->
+  <text x="80" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">1月</text>
+  <text x="155" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">2月</text>
+  <text x="230" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">3月</text>
+  <text x="305" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">4月</text>
+  <text x="380" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">5月</text>
+  <text x="455" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">6月</text>
+  <text x="530" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">7月</text>
+  <text x="605" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">8月</text>
+  <text x="680" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">9月</text>
+  <text x="750" y="370" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="middle" fill="#64748b">10月</text>
+  
+  <!-- Y轴标签 -->
+  <text x="70" y="350" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">0</text>
+  <text x="70" y="300" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">20</text>
+  <text x="70" y="250" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">40</text>
+  <text x="70" y="200" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">60</text>
+  <text x="70" y="150" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">80</text>
+  <text x="70" y="100" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">100</text>
+  <text x="70" y="50" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" text-anchor="end" fill="#64748b">120</text>
+  
+  <!-- 图例 -->
+  <rect x="600" y="20" width="14" height="3" fill="#4361ee" />
+  <text x="620" y="23" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" fill="#64748b">总体风险指数</text>
+  
+  <line x1="600" y1="36" x2="614" y2="36" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,5" />
+  <text x="620" y="39" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" fill="#64748b">市场波动指数</text>
+  
+  <rect x="600" y="49" width="14" height="3" fill="#ef4444" />
+  <text x="620" y="52" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12" fill="#64748b">流动性风险</text>
+</svg>
